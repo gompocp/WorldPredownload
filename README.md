@@ -7,11 +7,6 @@
 -If you go to another world while downloading, it'll cancel the download <br>
 -Performance may degrade on world enter and opening up a worldInfo or userInfo page due to you having a large cache size <br>
 
-# Bugs <br>
--Hitting download on a world then switching to another world, and closing the menu then <br> 
- selecting show world page in the popup causes the worldInstances to disappear
-
-
 # Todo <br>
 -Possibly Add a 15 second timer on the preload option for invites to prevent api spam <br>
 
