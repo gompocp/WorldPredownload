@@ -17,6 +17,7 @@ namespace WorldPredownload.UI
         public static bool canChangeText { get; set; } = true;
         public static string userID { get; set; } = "";
         public static APIUser user { get; set; }
+        public static string worldID { get; set; } = "";
         public static PageUserInfo userInfo { get; set; }
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Playlists";
@@ -40,6 +41,7 @@ namespace WorldPredownload.UI
                 {
                     user = GetUserInfo().user;
                     userID = user.id;
+                    worldID = GetUserInfo().field_Private_ApiWorld_0.id;
                     WorldDownloadManager.DownloadWorld(GetUserInfo().field_Private_ApiWorld_0, DownloadFromType.Friend);
                 }
                 catch { MelonLogger.LogWarning(CLICK_ERROR_MESSAGE); }
@@ -62,6 +64,7 @@ namespace WorldPredownload.UI
             {
                 // if it isn't up who the fuck cares what it says
             }
+            canChangeText = true;
         }
 
 

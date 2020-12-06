@@ -38,7 +38,7 @@ namespace WorldPredownload.UI
                     ApiWorldInstance apiWorldInstance = GetWorldInfo().worldInstance;
                     WorldDownloadManager.DownloadWorld(GetWorldInfo().prop_ApiWorld_0, DownloadFromType.World);
                 }
-                catch { }
+                catch(Exception e) { MelonLogger.Log($"Exception Occured Here: {e}"); }
             }));
         }
 
@@ -76,6 +76,7 @@ namespace WorldPredownload.UI
                     button.SetText(Constants.BUTTON_IDLE_TEXT);
             }
             catch { }
+            canChangeText = true;
         }
 
         private static PageWorldInfo GetWorldInfo()

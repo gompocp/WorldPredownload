@@ -89,9 +89,24 @@ namespace WorldPredownload.DownloadManager
 
         }
 
+        public static void ResetButtons()
+        {
+            world = null;
+            WorldButton.apiWorld = null;
+            WorldButton.apiWorldInstance = null;
+            WorldButton.worldID = "";
+            FriendButton.user = null;
+            FriendButton.worldID = "";
+            FriendButton.userID = null;
+        }
+
         public static void DisplayWorldPopup()
         {
-            if (GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo").active) return;
+            if (GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo").active)
+            {
+                ResetButtons();
+                return;
+            }
             VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_String_Action_Action_1_VRCUiPopup_1(
                 "World Download Complete",
                 "Your world has finished downloading, you can now go to the world if you wish so",
@@ -103,12 +118,13 @@ namespace WorldPredownload.DownloadManager
                     //VRCUiManager.prop_VRCUiManager_0.Me
                     VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(WorldButton.worldInfo);
                     WorldButton.worldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(world, WorldButton.apiWorldInstance);
-
+                    ResetButtons();
                 }),
                 "Dismiss",
                 new Action(delegate
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    ResetButtons();
                 })
             );
         }
@@ -120,7 +136,11 @@ namespace WorldPredownload.DownloadManager
 
         public static void DisplayFriendPopup()
         {
-            if (GameObject.Find("UserInterface/MenuContent/Screens/UserInfo").active) return;
+            if (GameObject.Find("UserInterface/MenuContent/Screens/UserInfo").active)
+            {
+                ResetButtons();
+                return;
+            }
             VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_String_Action_Action_1_VRCUiPopup_1(
                 "World Download Complete",
                 "Your world has finished downloading, you can now go to the world if you wish so",
@@ -131,12 +151,14 @@ namespace WorldPredownload.DownloadManager
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
                     VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(FriendButton.userInfo);
                     FriendButton.userInfo.Method_Public_Void_APIUser_PDM_0(FriendButton.user);
+                    ResetButtons();
 
                 }),
                 "Dismiss",
                 new Action(delegate
                 {
                     VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    ResetButtons();
                 })
             );
         }

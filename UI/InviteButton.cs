@@ -61,6 +61,7 @@ namespace WorldPredownload.UI
             {
                 // if it isn't up who the fuck cares what it says
             }
+            canChangeText = true;
         }
 
         public static void UpdateText()
@@ -69,7 +70,7 @@ namespace WorldPredownload.UI
                 button.SetActive(true);
                 if (WorldDownloadManager.downloading)
                 {
-                    if (Utilities.GetSelectedNotification().Equals(WorldDownloadManager.currentDownloadingID))
+                    if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.currentDownloadingID))
                         canChangeText = true;
                     else
                     {
