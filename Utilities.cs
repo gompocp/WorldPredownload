@@ -1,24 +1,18 @@
 ﻿using MelonLoader;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using Transmtn.DTO.Notifications;
 using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
-using AssetBundleDownload = CustomYieldInstructionPublicObAsByStInStCoBoObInUnique;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
 using OnDownloadProgress = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoUnUnique;
 using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoStObStUnique;
-using LoadErrorReason = EnumPublicSealedvaNoMiFiUnCoSeAsDuAsUnique;
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
-using UnityEngine.UI;
 using VRC.Core;
-using WorldPredownload.UI;
+using UnityEngine.EventSystems;
 
 namespace WorldPredownload
 {
@@ -30,6 +24,10 @@ namespace WorldPredownload
         private static DownloadWorldDelegate downloadWorldDelegate;
 
         private static ClearErrorsDelegate clearErrorsDelegate;
+
+        private static ShowDismissPopupDelegate showDismissPopupDelegate;
+
+        private static ShowOptionsPopupDelegate showOptionsPopupDelegate;
 
         private static DownloadWorldDelegate GetDownloadWorldDelegate
         {
@@ -72,6 +70,45 @@ namespace WorldPredownload
             }
         }
 
+
+
+        private static ShowDismissPopupDelegate GetShowDismissPopupDelegate
+        {
+            get
+            {
+                if (showDismissPopupDelegate != null) return showDismissPopupDelegate;
+                MethodInfo popupMethod = typeof(VRCUiPopupManager).GetMethods(BindingFlags.Public | BindingFlags.Instance).Single(
+                    m => 
+                    m.GetParameters().Length == 5 
+                    && m.XRefScanFor("Popups/StandardPopupV2")
+                );
+
+                showDismissPopupDelegate = (ShowDismissPopupDelegate)Delegate.CreateDelegate(
+                            typeof(ShowDismissPopupDelegate),
+                            VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0,
+                            popupMethod
+                );
+                return showDismissPopupDelegate;
+            }
+        }
+
+        private static ShowOptionsPopupDelegate GetShowOptionsPopupDelegate
+        {
+            get
+            {
+                if (showOptionsPopupDelegate != null) return showOptionsPopupDelegate;
+                MethodInfo popupMethod = typeof(VRCUiPopupManager).GetMethods(BindingFlags.Public | BindingFlags.Instance).Single(
+                    m => m.GetParameters().Length == 7 && m.XRefScanFor("Popups/StandardPopupV2"));
+
+                showOptionsPopupDelegate = (ShowOptionsPopupDelegate)Delegate.CreateDelegate(
+                    typeof(ShowOptionsPopupDelegate),
+                    VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0,
+                    popupMethod
+                );
+                return showOptionsPopupDelegate;
+            }
+        }
+
         public static void DownloadApiWorld(ApiWorld world, OnDownloadProgress onProgress, OnDownloadComplete onSuccess, OnDownloadError onError, bool bypassDownloadSizeLimit, UnpackType unpackType)
         {
             GetDownloadWorldDelegate(world, onProgress, onSuccess, onError, bypassDownloadSizeLimit, unpackType);
@@ -81,6 +118,17 @@ namespace WorldPredownload
         {
             GetClearErrorsDelegate();
         }
+
+        public static void ShowOptionPopup(string title, string body, string leftButtonText, Il2CppSystem.Action leftButtonAction, string rightButtonText, Il2CppSystem.Action rightButtonAction)
+        {
+            GetShowOptionsPopupDelegate(title, body, leftButtonText, leftButtonAction, rightButtonText, rightButtonAction);
+        }
+
+        public static void ShowDismissPopup(string title, string body, string middleButtonText, Il2CppSystem.Action buttonAction)
+        {
+            GetShowDismissPopupDelegate(title, body, middleButtonText, buttonAction);
+        }
+
 
         public static AssetBundleDownloadManager GetAssetBundleDownloadManager()
         {
@@ -100,6 +148,14 @@ namespace WorldPredownload
         public static GameObject CloneGameObject(string pathToGameObject, string pathToParent)
         {
             return GameObject.Instantiate(GameObject.Find(pathToGameObject).transform, GameObject.Find(pathToParent).transform).gameObject;
+        }
+
+        public static void DeselectClickedButton(GameObject button)
+        {
+            if (EventSystem.current.currentSelectedGameObject == button)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
 
         public static string ByteArrayToString(byte[] ba)
@@ -130,8 +186,13 @@ namespace WorldPredownload
             return false;
         }
 
+        public static bool XRefScanFor(this MethodBase methodBase, string searchTerm)
+        {
+            return XrefScanner.XrefScan(methodBase).Any(
+                xref => xref.Type == XrefType.Global && xref.ReadAsObject()?.ToString().IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0);
+        }
 
-        private static bool checkXrefNoStrings(MethodBase m)
+            private static bool checkXrefNoStrings(MethodBase m)
         {
             try
             {
@@ -146,7 +207,27 @@ namespace WorldPredownload
             return false;
 
         }
-       
+
+
+
+        private delegate void ShowOptionsPopupDelegate(
+            string title, 
+            string body, 
+            string leftButtonText, 
+            Il2CppSystem.Action leftButtonAction, 
+            string rightButtonText, 
+            Il2CppSystem.Action rightButtonAction, 
+            Il2CppSystem.Action<VRCUiPopup> additionalSetup = null
+        );
+
+        private delegate void ShowDismissPopupDelegate(
+            string title, 
+            string body, 
+            string middleButtonText, 
+            Il2CppSystem.Action middleButtonAction, 
+            Il2CppSystem.Action<VRCUiPopup> additionalSetup = null
+        );
+
         private delegate void ClearErrorsDelegate();
 
         private delegate void DownloadWorldDelegate(ApiWorld world, OnDownloadProgress onProgress, OnDownloadComplete onSuccess, OnDownloadError onError, bool bypassDownloadSizeLimit, UnpackType unpackType);

@@ -15,7 +15,6 @@ namespace WorldPredownload.UI
         public static string worldID { get; set; } = "";
         public static ApiWorld apiWorld { get; set; }
         public static ApiWorldInstance apiWorldInstance { get; set; }
-        //public static 
 
         public static PageWorldInfo worldInfo { get; set; }
 
@@ -33,7 +32,7 @@ namespace WorldPredownload.UI
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(new Action(delegate
             {
-
+                Utilities.DeselectClickedButton(button);
                 try
                 {
                     if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))

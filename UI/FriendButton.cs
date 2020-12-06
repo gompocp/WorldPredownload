@@ -6,7 +6,6 @@ using VRC.Core;
 using VRC.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
-using Object = System.Object;
 
 namespace WorldPredownload.UI
 {
@@ -31,12 +30,13 @@ namespace WorldPredownload.UI
         public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            button.GetRectTrans().SetAnchoredPos(new Vector2(-50f, -50f));  //213f, 315f
+            button.GetRectTrans().SetAnchoredPos(new Vector2(215f, -230f));  //213f, 315f
             button.SetActive(true);
             button.SetName(GAMEOBJECT_NAME);
             button.SetText(BUTTON_DEFAULT_TEXT);
             button.SetButtonActionInChildren(new Action(delegate
             {
+                Utilities.DeselectClickedButton(button);
                 try
                 {
                     if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
@@ -76,7 +76,7 @@ namespace WorldPredownload.UI
         public static IEnumerator UpdateText()
         {
             while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
-            FriendButton.button.SetActive(true);
+            button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {
                 if (GetUserInfo().user.id.Equals(userID))
@@ -91,9 +91,18 @@ namespace WorldPredownload.UI
             }
             else
             {
+                while (GetUserInfo().field_Private_ApiWorld_0 == null) yield return null;
+                    //_ = GetUserInfo() ?? throw new NullReferenceException(message:"User Info Null");
+                    //_ = GetUserInfo().field_Private_ApiWorld_0 ?? throw new NullReferenceException(message: "User Info World Null");
                 if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else button.SetText(Constants.BUTTON_IDLE_TEXT);
+                    /*
+                try
+                {
+                }
+                catch(Exception e) { MelonLogger.Log($"Failed to check cache for world download: {e.Message}"); }
+                */
             }
         }
 

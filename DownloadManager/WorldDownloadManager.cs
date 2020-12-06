@@ -37,7 +37,7 @@ namespace WorldPredownload.DownloadManager
             string size = request.GetResponseHeader("Content-Length");
             if (request.downloadProgress >= 0 && 0.9 >= request.downloadProgress)
             {
-                string progress = ((request.downloadProgress / 0.9) * 100).ToString("0.00") + " % ";
+                string progress = ((request.downloadProgress / 0.9) * 100).ToString("0") + " % ";
                 WorldDownloadStatus.gameObject.SetText("Progress:" + progress);
                 
                 if (InviteButton.canChangeText) InviteButton.button.SetText("Cancel: " + progress);
@@ -56,7 +56,14 @@ namespace WorldPredownload.DownloadManager
             InviteButton.UpdateTextDownloadStopped();
             if (message.Contains("Request aborted")) return;
             MelonLogger.LogError(url + " " + message + " " + reason);
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_Action_1_VRCUiPopup_0("World Preload Failed", "There was an error preloading the world", "Dismiss", new Action(delegate { VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0(); }));
+            Utilities.ShowDismissPopup(
+                "World Preload Failed", 
+                "There was an error preloading the world", 
+                "Dismiss", 
+                new Action(delegate {
+                    Utilities.HideCurrentPopup();
+                })
+            );
         }
 
 
@@ -64,14 +71,9 @@ namespace WorldPredownload.DownloadManager
         {
             downloading = false;
             CacheManager.AddDirectory(CacheManager.ComputeAssetHash(world.id));
-            try
-            {
-                InviteButton.UpdateTextDownloadStopped();
-                FriendButton.UpdateTextDownloadStopped();
-                WorldButton.UpdateTextDownloadStopped();
-
-            }
-            catch { MelonLogger.Log("Failed to update Text"); }
+            InviteButton.UpdateTextDownloadStopped();
+            FriendButton.UpdateTextDownloadStopped();
+            WorldButton.UpdateTextDownloadStopped();
             WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
             MelonLogger.Log("World Downloaded: " + download.field_Public_String_0);
             switch (downloadFromType)
@@ -107,7 +109,7 @@ namespace WorldPredownload.DownloadManager
                 ResetButtons();
                 return;
             }
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_String_Action_Action_1_VRCUiPopup_1(
+            Utilities.ShowOptionPopup(
                 "World Download Complete",
                 "Your world has finished downloading, you can now go to the world if you wish so",
                 "Go to World Page",
@@ -131,7 +133,7 @@ namespace WorldPredownload.DownloadManager
 
         public static void DisplayInvitePopup()
         {
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_Action_1_VRCUiPopup_0(
+            Utilities.ShowDismissPopup(
                 "World Download Complete", 
                 "Your world has finished downloading, you can now go to the world if you wish so", 
                 "Dismiss", 
@@ -148,7 +150,7 @@ namespace WorldPredownload.DownloadManager
                 ResetButtons();
                 return;
             }
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_String_Action_Action_1_VRCUiPopup_1(
+            Utilities.ShowOptionPopup(
                 "World Download Complete",
                 "Your world has finished downloading, you can now go to the world if you wish so",
                 "Go to Friend Page",
@@ -172,11 +174,14 @@ namespace WorldPredownload.DownloadManager
 
         public static void DownloadWorld(ApiWorld apiWorld, DownloadFromType downloadType)
         {
-            downloadFromType = downloadType;
-            world = apiWorld;
-            currentDownloadingID = string.Copy(apiWorld.id);
+            
+            
             if (!downloading)
             {
+                MelonLogger.Log("Beginning Download");
+                downloadFromType = downloadType;
+                world = apiWorld;
+                currentDownloadingID = string.Copy(apiWorld.id);
                 downloading = true;
                 Action<UnityEngine.Networking.UnityWebRequest> onProgressDel = OnDownloadProgress;
                 Action<AssetBundleDownload> onCompleteDel = OnComplete;

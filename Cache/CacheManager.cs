@@ -25,7 +25,7 @@ namespace WorldPredownload.Cache
                 directories.Add(directoryInfo.Name);
             }
             timer.Stop();
-            MelonLogger.Log($"Finished getting { directories.Count } directories in { timer.ElapsedMilliseconds }ms");
+            MelonLogger.Log($"Finished getting { directories.Count } cache entries in { timer.ElapsedMilliseconds }ms");
             yield break; 
             
         }
