@@ -31,8 +31,14 @@ namespace WorldPredownload.UI
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(new Action(delegate
             {
+
                 try
                 {
+                    if (WorldDownloadManager.downloading || CacheManager.HasDownloadedWorld(GetWorldInfo().field_Private_ApiWorld_0.id))
+                    {
+                        WorldDownloadManager.CancelDownload();
+                        return;
+                    }
                     worldInfo = GetWorldInfo();
                     worldID = string.Copy(GetWorldInfo().field_Private_ApiWorld_0.id);
                     ApiWorldInstance apiWorldInstance = GetWorldInfo().worldInstance;

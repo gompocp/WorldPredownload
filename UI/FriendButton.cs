@@ -31,7 +31,7 @@ namespace WorldPredownload.UI
         public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            button.GetRectTrans().SetAnchoredPos(new Vector2(213f, 315f));
+            button.GetRectTrans().SetAnchoredPos(new Vector2(-50f, -50f));  //213f, 315f
             button.SetActive(true);
             button.SetName(GAMEOBJECT_NAME);
             button.SetText(BUTTON_DEFAULT_TEXT);
@@ -39,6 +39,11 @@ namespace WorldPredownload.UI
             {
                 try
                 {
+                    if (WorldDownloadManager.downloading || CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id))
+                    {
+                        WorldDownloadManager.CancelDownload();
+                        return;
+                    }
                     user = GetUserInfo().user;
                     userID = user.id;
                     worldID = GetUserInfo().field_Private_ApiWorld_0.id;

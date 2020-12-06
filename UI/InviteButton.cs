@@ -29,7 +29,7 @@ namespace WorldPredownload.UI
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(new Action(delegate
             {
-                if (WorldDownloadManager.downloading)
+                if (WorldDownloadManager.downloading || CacheManager.HasDownloadedWorld(Utilities.GetSelectedNotification().GetWorldID()))
                 {
                     WorldDownloadManager.CancelDownload();
                     return;

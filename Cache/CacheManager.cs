@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MelonLoader;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Diagnostics;
 
 namespace WorldPredownload.Cache
 {
@@ -15,12 +17,17 @@ namespace WorldPredownload.Cache
         public static System.Collections.IEnumerator UpdateDirectoriesBackground()
         {
             yield return null;
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             directories.Clear();
             foreach (var directoryInfo in new DirectoryInfo(GetCache().path).GetDirectories())
             {
                 directories.Add(directoryInfo.Name);
             }
-            yield break;
+            timer.Stop();
+            MelonLogger.Log($"Finished getting { directories.Count } directories in { timer.ElapsedMilliseconds }ms");
+            yield break; 
+            
         }
 
         public static void AddDirectory(string hash)

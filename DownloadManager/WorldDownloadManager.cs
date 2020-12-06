@@ -167,6 +167,7 @@ namespace WorldPredownload.DownloadManager
         {
             downloadFromType = downloadType;
             world = apiWorld;
+            currentDownloadingID = string.Copy(apiWorld.id);
             if (!downloading)
             {
                 downloading = true;
