@@ -39,7 +39,7 @@ namespace WorldPredownload.UI
             {
                 try
                 {
-                    if (WorldDownloadManager.downloading || CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id))
+                    if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                     {
                         WorldDownloadManager.CancelDownload();
                         return;

@@ -32,5 +32,6 @@ namespace WorldPredownload
         }
 
         public static void OnNotificationMenuOpen() => InviteButton.UpdateText();
+
     }
 }

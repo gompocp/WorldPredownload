@@ -87,6 +87,11 @@ namespace WorldPredownload
             return AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0;
         }
 
+        public static void HideCurrentPopup()
+        {
+            VRCUiManager.prop_VRCUiManager_0.HideScreen("POPUP");
+        }
+
         public static Notification GetSelectedNotification()
         {
             return QuickMenu.prop_QuickMenu_0.field_Private_Notification_0;

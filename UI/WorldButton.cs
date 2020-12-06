@@ -15,6 +15,8 @@ namespace WorldPredownload.UI
         public static string worldID { get; set; } = "";
         public static ApiWorld apiWorld { get; set; }
         public static ApiWorldInstance apiWorldInstance { get; set; }
+        //public static 
+
         public static PageWorldInfo worldInfo { get; set; }
 
 
@@ -34,14 +36,15 @@ namespace WorldPredownload.UI
 
                 try
                 {
-                    if (WorldDownloadManager.downloading || CacheManager.HasDownloadedWorld(GetWorldInfo().field_Private_ApiWorld_0.id))
+                    if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                     {
                         WorldDownloadManager.CancelDownload();
                         return;
                     }
                     worldInfo = GetWorldInfo();
                     worldID = string.Copy(GetWorldInfo().field_Private_ApiWorld_0.id);
-                    ApiWorldInstance apiWorldInstance = GetWorldInfo().worldInstance;
+                    apiWorldInstance = GetWorldInfo().worldInstance;
+                    
                     WorldDownloadManager.DownloadWorld(GetWorldInfo().prop_ApiWorld_0, DownloadFromType.World);
                 }
                 catch(Exception e) { MelonLogger.Log($"Exception Occured Here: {e}"); }

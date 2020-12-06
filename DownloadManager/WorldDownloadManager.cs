@@ -113,7 +113,7 @@ namespace WorldPredownload.DownloadManager
                 "Go to World Page",
                 new Action(delegate
                 {
-                    VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/WorldsButton").GetComponent<Button>().onClick.Invoke();
                     //VRCUiManager.prop_VRCUiManager_0.Me
                     VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(WorldButton.worldInfo);
@@ -123,7 +123,7 @@ namespace WorldPredownload.DownloadManager
                 "Dismiss",
                 new Action(delegate
                 {
-                    VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    Utilities.HideCurrentPopup();
                     ResetButtons();
                 })
             );
@@ -131,7 +131,14 @@ namespace WorldPredownload.DownloadManager
 
         public static void DisplayInvitePopup()
         {
-            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_Action_1_VRCUiPopup_0("World Download Complete", "Your world has finished downloading, you can now go to the world if you wish so", "Dismiss", new Action(delegate { VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0(); }));
+            VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_String_String_String_Action_Action_1_VRCUiPopup_0(
+                "World Download Complete", 
+                "Your world has finished downloading, you can now go to the world if you wish so", 
+                "Dismiss", 
+                new Action(delegate {
+                    Utilities.HideCurrentPopup();
+                })
+            );
         }
 
         public static void DisplayFriendPopup()
@@ -147,7 +154,7 @@ namespace WorldPredownload.DownloadManager
                 "Go to Friend Page",
                 new Action(delegate
                 {
-                    VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
                     VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(FriendButton.userInfo);
                     FriendButton.userInfo.Method_Public_Void_APIUser_PDM_0(FriendButton.user);
@@ -157,7 +164,7 @@ namespace WorldPredownload.DownloadManager
                 "Dismiss",
                 new Action(delegate
                 {
-                    VRCUiPopupManager.prop_VRCUiPopupManager_0.Method_Public_Void_0();
+                    Utilities.HideCurrentPopup();
                     ResetButtons();
                 })
             );
