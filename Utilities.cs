@@ -29,6 +29,8 @@ namespace WorldPredownload
 
         private static ShowOptionsPopupDelegate showOptionsPopupDelegate;
 
+        private static PushUIPageDelegate pushUIPageDelegate;
+
         private static DownloadWorldDelegate GetDownloadWorldDelegate
         {
             get
@@ -109,6 +111,29 @@ namespace WorldPredownload
             }
         }
 
+        private static PushUIPageDelegate GetPushUIPageDelegate
+        {
+            get
+            {
+                if (pushUIPageDelegate != null) return pushUIPageDelegate;
+                MethodInfo pushPageMethod = typeof(VRCUiManager).GetMethods().Single(
+                    m => m.GetParameters().Length == 1
+                    && m.GetParameters()[0].ParameterType == typeof(VRCUiPage)
+                    && !m.Name.Contains("PDM")
+                    && m.ReturnType == typeof(VRCUiPage)
+                );
+
+                pushUIPageDelegate = (PushUIPageDelegate)Delegate.CreateDelegate(
+                    typeof(PushUIPageDelegate),
+                    VRCUiManager.prop_VRCUiManager_0,
+                    pushPageMethod
+                );
+                return pushUIPageDelegate;
+            }
+        }
+
+
+
         public static void DownloadApiWorld(ApiWorld world, OnDownloadProgress onProgress, OnDownloadComplete onSuccess, OnDownloadError onError, bool bypassDownloadSizeLimit, UnpackType unpackType)
         {
             GetDownloadWorldDelegate(world, onProgress, onSuccess, onError, bypassDownloadSizeLimit, unpackType);
@@ -127,6 +152,11 @@ namespace WorldPredownload
         public static void ShowDismissPopup(string title, string body, string middleButtonText, Il2CppSystem.Action buttonAction)
         {
             GetShowDismissPopupDelegate(title, body, middleButtonText, buttonAction);
+        }
+
+        public static void ShowPage(VRCUiPage page)
+        {
+            GetPushUIPageDelegate(page);
         }
 
 
@@ -209,6 +239,7 @@ namespace WorldPredownload
         }
 
 
+        private delegate VRCUiPage PushUIPageDelegate(VRCUiPage page); 
 
         private delegate void ShowOptionsPopupDelegate(
             string title, 

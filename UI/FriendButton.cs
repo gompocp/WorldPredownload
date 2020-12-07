@@ -25,12 +25,13 @@ namespace WorldPredownload.UI
         private const string BUTTON_DEFAULT_TEXT = "Preload";
         private const string PATH_TO_GAMEOBJECT_TO_DESTROY = "UserInterface/MenuContent/Screens/UserInfo/User Panel/PreloadWorld/PlaylistsButton/Image/Icon_New";
         private const string PATH_TO_USERINFO = "UserInterface/MenuContent/Screens/UserInfo";
+        private const string PATH_TO_BACKGROUND = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Panel";
         private const string CLICK_ERROR_MESSAGE = "User may have clicked too quickly";
 
         public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            button.GetRectTrans().SetAnchoredPos(new Vector2(215f, -230f));  //213f, 315f
+            button.GetRectTrans().SetAnchoredPos(Constants.FRIEND_BUTTON_POS);  //213f, 315f
             button.SetActive(true);
             button.SetName(GAMEOBJECT_NAME);
             button.SetText(BUTTON_DEFAULT_TEXT);
@@ -52,6 +53,10 @@ namespace WorldPredownload.UI
                 catch { MelonLogger.LogWarning(CLICK_ERROR_MESSAGE); }
             }));
             GameObject.Destroy(GameObject.Find(PATH_TO_GAMEOBJECT_TO_DESTROY));
+
+            Transform background = GameObject.Find(PATH_TO_BACKGROUND).transform;
+            background.localScale = new Vector3(background.localScale.x, Constants.FRIEND_PANEL_YSCALE, background.localScale.z);
+            background.localPosition = new Vector3(background.localPosition.x, Constants.FRIEND_PANEL_YPOS, background.localPosition.z);
         }
 
 

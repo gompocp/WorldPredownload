@@ -16,18 +16,11 @@ namespace WorldPredownload
             button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(action));
         }
 
-        public static void SetButtonAction(this GameObject gameObject, Action action) { //=>
-            _ = gameObject ?? throw new NullReferenceException(message: "Button GameObject Null, Cloned GameObject may have been edited by another mod");
-            _ = gameObject.GetComponent<Button>() ?? throw new NullReferenceException(message: "Button GameObject Null, Cloned GameObject may have been edited by another mod");
+        public static void SetButtonAction(this GameObject gameObject, Action action) =>
             gameObject.GetComponent<Button>().SetAction(action);
-        }
 
-        public static void SetButtonActionInChildren(this GameObject gameObject, Action action)
-        {
-            _ = gameObject ?? throw new NullReferenceException(message: "Button GameObject Null, Cloned GameObject may have been edited by another mod");
-            _ = gameObject.GetComponentInChildren<Button>() ?? throw new NullReferenceException(message: "Button GameObject Null, Cloned GameObject may have been edited by another mod");
+        public static void SetButtonActionInChildren(this GameObject gameObject, Action action) =>
             gameObject.GetComponentInChildren<Button>().SetAction(action);
-        }
 
         public static Text GetTextComponentInChildren(this GameObject gameObject) =>
             gameObject.GetComponentInChildren<Text>();

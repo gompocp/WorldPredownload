@@ -39,7 +39,6 @@ namespace WorldPredownload.DownloadManager
             {
                 string progress = ((request.downloadProgress / 0.9) * 100).ToString("0") + " % ";
                 WorldDownloadStatus.gameObject.SetText("Progress:" + progress);
-                
                 if (InviteButton.canChangeText) InviteButton.button.SetText("Cancel: " + progress);
                 if (FriendButton.canChangeText) FriendButton.button.SetText("Cancel: " + progress);
                 if (WorldButton.canChangeText) WorldButton.button.SetText("Cancel: " + progress);
@@ -54,12 +53,13 @@ namespace WorldPredownload.DownloadManager
             FriendButton.UpdateTextDownloadStopped();
             WorldButton.UpdateTextDownloadStopped();
             InviteButton.UpdateTextDownloadStopped();
+            ResetButtons();
             if (message.Contains("Request aborted")) return;
-            MelonLogger.LogError(url + " " + message + " " + reason);
+            MelonLogger.LogWarning(url + " " + message + " " + reason);
             Utilities.ShowDismissPopup(
-                "World Preload Failed", 
-                "There was an error preloading the world", 
-                "Dismiss", 
+                Constants.DOWNLOAD_ERROR_TITLE,
+                Constants.DOWNLOAD_ERROR_MSG, 
+                Constants.DOWNLOAD_ERROR_BTN_TEXT, 
                 new Action(delegate {
                     Utilities.HideCurrentPopup();
                 })
@@ -110,19 +110,18 @@ namespace WorldPredownload.DownloadManager
                 return;
             }
             Utilities.ShowOptionPopup(
-                "World Download Complete",
-                "Your world has finished downloading, you can now go to the world if you wish so",
-                "Go to World Page",
+                Constants.DOWNLOAD_SUCCESS_TITLE,
+                Constants.DOWNLOAD_SUCCESS_MSG,
+                Constants.DOWNLOAD_SUCCESS_LEFT_BTN_TEXT,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/WorldsButton").GetComponent<Button>().onClick.Invoke();
-                    //VRCUiManager.prop_VRCUiManager_0.Me
-                    VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(WorldButton.worldInfo);
+                    Utilities.ShowPage(WorldButton.worldInfo);
                     WorldButton.worldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(world, WorldButton.apiWorldInstance);
                     ResetButtons();
                 }),
-                "Dismiss",
+                Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
@@ -134,11 +133,12 @@ namespace WorldPredownload.DownloadManager
         public static void DisplayInvitePopup()
         {
             Utilities.ShowDismissPopup(
-                "World Download Complete", 
-                "Your world has finished downloading, you can now go to the world if you wish so", 
-                "Dismiss", 
+                Constants.DOWNLOAD_SUCCESS_TITLE,
+                Constants.DOWNLOAD_SUCCESS_MSG, 
+                Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT, 
                 new Action(delegate {
                     Utilities.HideCurrentPopup();
+                    ResetButtons();
                 })
             );
         }
@@ -151,19 +151,18 @@ namespace WorldPredownload.DownloadManager
                 return;
             }
             Utilities.ShowOptionPopup(
-                "World Download Complete",
-                "Your world has finished downloading, you can now go to the world if you wish so",
-                "Go to Friend Page",
+                Constants.DOWNLOAD_SUCCESS_TITLE,
+                Constants.DOWNLOAD_SUCCESS_MSG,
+                Constants.DOWNLOAD_SUCCESS_LEFT_BTN_TEXT_F,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
-                    VRCUiManager.prop_VRCUiManager_0.Method_Public_VRCUiPage_VRCUiPage_0(FriendButton.userInfo);
+                    Utilities.ShowPage(FriendButton.userInfo);
                     FriendButton.userInfo.Method_Public_Void_APIUser_PDM_0(FriendButton.user);
                     ResetButtons();
-
                 }),
-                "Dismiss",
+                Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
@@ -175,10 +174,8 @@ namespace WorldPredownload.DownloadManager
         public static void DownloadWorld(ApiWorld apiWorld, DownloadFromType downloadType)
         {
             
-            
             if (!downloading)
             {
-                MelonLogger.Log("Beginning Download");
                 downloadFromType = downloadType;
                 world = apiWorld;
                 currentDownloadingID = string.Copy(apiWorld.id);

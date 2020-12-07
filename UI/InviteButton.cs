@@ -24,7 +24,7 @@ namespace WorldPredownload.UI
         public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            button.GetRectTrans().SetAnchoredPos(new Vector2(1470f, -630f));
+            button.GetRectTrans().SetAnchoredPos(Constants.INVITE_BUTTON_POS);
             button.SetName(Constants.INVITE_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(new Action(delegate

@@ -26,7 +26,7 @@ namespace WorldPredownload.UI
         public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            button.GetRectTrans().SetAnchoredPos(new Vector2(200f, -188f));
+            button.GetRectTrans().SetAnchoredPos(Constants.WORLD_BUTTON_POS);
             button.SetActive(true);
             button.SetName(Constants.WORLD_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
@@ -37,6 +37,7 @@ namespace WorldPredownload.UI
                 {
                     if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                     {
+                        MelonLogger.Log("Cancelling download");
                         WorldDownloadManager.CancelDownload();
                         return;
                     }
