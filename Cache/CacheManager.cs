@@ -37,8 +37,19 @@ namespace WorldPredownload.Cache
 
         public static bool HasDownloadedWorld(string id)
         {
+            return false; //Dead Method for now in case I want to rework the invite checking mechanism
+        }
+
+        public static bool HasDownloadedWorld(string id, int version)
+        {
             _ = id ?? throw new ArgumentNullException(paramName: nameof(id), message: NULL_STRING_ARGUMENT); //Lazy null check
-            if (directories.Contains(ComputeAssetHash(id))) return true;
+            if (directories.Contains(ComputeAssetHash(id)))
+            {
+                if (HasVersion(ComputeAssetHash(id), version))
+                    return true;
+                else
+                    return false;
+            }
             else return false;
         }
 
@@ -51,5 +62,15 @@ namespace WorldPredownload.Cache
         {
             return Utilities.GetAssetBundleDownloadManager().field_Private_Cache_0;
         }
+
+        public static bool HasVersion(string hash, int version)
+        {
+            foreach(DirectoryInfo directoryInfo in new DirectoryInfo(Path.Combine(GetCache().path, hash)).GetDirectories())
+            {
+                if(directoryInfo.Name.Substring(0, directoryInfo.Name.Length - 6).EndsWith(version.ToString("X").ToLower())) return true;
+            }
+            return false;
+        }
+
     }
 }

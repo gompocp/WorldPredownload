@@ -65,7 +65,7 @@ namespace WorldPredownload.UI
             //Lazy way to check if the user menu is up
             try
             {
-                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id))
+                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else
                     button.SetText(Constants.BUTTON_IDLE_TEXT);
@@ -99,7 +99,7 @@ namespace WorldPredownload.UI
                 while (GetUserInfo().field_Private_ApiWorld_0 == null) yield return null;
                     //_ = GetUserInfo() ?? throw new NullReferenceException(message:"User Info Null");
                     //_ = GetUserInfo().field_Private_ApiWorld_0 ?? throw new NullReferenceException(message: "User Info World Null");
-                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id))
+                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else button.SetText(Constants.BUTTON_IDLE_TEXT);
                     /*
