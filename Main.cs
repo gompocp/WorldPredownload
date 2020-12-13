@@ -22,6 +22,7 @@ namespace WorldPredownload
             NotificationMenuListener.OnEnableMethod = typeof(Main).GetMethod(nameof(OnNotificationMenuOpen));
             ClassInjector.RegisterTypeInIl2Cpp<NotificationMenuListener>();
             SetupUserInfoPatch.Patch();
+            SetupSocialMenuPatch.Patch();
         }
 
         public override void VRChat_OnUiManagerInit()

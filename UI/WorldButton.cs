@@ -37,7 +37,6 @@ namespace WorldPredownload.UI
                 {
                     if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                     {
-                        MelonLogger.Log("Cancelling download");
                         WorldDownloadManager.CancelDownload();
                         return;
                     }

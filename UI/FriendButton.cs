@@ -26,6 +26,7 @@ namespace WorldPredownload.UI
         private const string PATH_TO_GAMEOBJECT_TO_DESTROY = "UserInterface/MenuContent/Screens/UserInfo/User Panel/PreloadWorld/PlaylistsButton/Image/Icon_New";
         private const string PATH_TO_USERINFO = "UserInterface/MenuContent/Screens/UserInfo";
         private const string PATH_TO_BACKGROUND = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Panel";
+        private const string PATH_TO_INFO_PANEL = "UserInterface/MenuContent/Screens/UserInfo/User Panel";
         private const string CLICK_ERROR_MESSAGE = "User may have clicked too quickly";
 
         public static void Setup()
@@ -57,6 +58,9 @@ namespace WorldPredownload.UI
             Transform background = GameObject.Find(PATH_TO_BACKGROUND).transform;
             background.localScale = new Vector3(background.localScale.x, Constants.FRIEND_PANEL_YSCALE, background.localScale.z);
             background.localPosition = new Vector3(background.localPosition.x, Constants.FRIEND_PANEL_YPOS, background.localPosition.z);
+
+            Transform userInfo = GameObject.Find(PATH_TO_INFO_PANEL).transform;
+            userInfo.localPosition = new Vector3(userInfo.localPosition.x, Constants.SOCIAL_PANEL_YPOS, userInfo.localPosition.z);
         }
 
 
@@ -81,6 +85,8 @@ namespace WorldPredownload.UI
         public static IEnumerator UpdateText()
         {
             while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
+            //if (!GetUserInfo().user.isFriend) yield break;
+            //if (!GetUserInfo().user.world) yield break;
             button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {
@@ -109,6 +115,7 @@ namespace WorldPredownload.UI
                 catch(Exception e) { MelonLogger.Log($"Failed to check cache for world download: {e.Message}"); }
                 */
             }
+            
         }
 
         public static PageUserInfo GetUserInfo()

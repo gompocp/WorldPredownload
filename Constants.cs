@@ -31,5 +31,6 @@ namespace WorldPredownload
         public static readonly Vector2 FRIEND_BUTTON_POS = new Vector2(215f, -230f);
         public const float FRIEND_PANEL_YPOS = -350f;
         public const float FRIEND_PANEL_YSCALE = 1.1f;
+        public const float SOCIAL_PANEL_YPOS = 384f;
     }
 }

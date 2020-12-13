@@ -58,18 +58,32 @@ namespace WorldPredownload.Cache
             return Utilities.ByteArrayToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(id))).ToUpper().Substring(0, 16);
         }
 
-        public static UnityEngine.Cache GetCache()
+        private static UnityEngine.Cache GetCache()
         {
             return Utilities.GetAssetBundleDownloadManager().field_Private_Cache_0;
         }
 
-        public static bool HasVersion(string hash, int version)
+        private static bool HasVersion(string hash, int version)
         {
             foreach(DirectoryInfo directoryInfo in new DirectoryInfo(Path.Combine(GetCache().path, hash)).GetDirectories())
             {
-                if(directoryInfo.Name.Substring(0, directoryInfo.Name.Length - 6).EndsWith(version.ToString("X").ToLower())) return true;
+                //if(directoryInfo.Name.Substring(0, directoryInfo.Name.Length - 6).EndsWith(version.ToString("X").ToLower())) return true;
+                if (directoryInfo.Name.EndsWith(ComputeVersionString(version))) return true;
             }
             return false;
+        }
+
+        private static string ComputeVersionString(int version)
+        {
+            // This'll work with worlds with a version sub 4096
+            string result = version.ToString("X").ToLower();
+            if (result.Length == 3)
+            {
+                string part = result.Substring(0, 1);
+                result = result.Substring(1, result.Length - 1);
+                return result += $"0{part}0000";
+            }
+            else return result += "000000";
         }
 
     }

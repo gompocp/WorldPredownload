@@ -188,6 +188,14 @@ namespace WorldPredownload
             }
         }
 
+        public static bool isInSameWorld(APIUser user)
+        {
+            if (user.worldId.Equals(VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_Player_0.prop_APIUser_0.worldId))
+                return true;
+            else
+                return false;
+        }
+
         public static string ByteArrayToString(byte[] ba)
         {
             StringBuilder hex = new StringBuilder(ba.Length * 2);

@@ -6,6 +6,8 @@ using VRC.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
+using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa9vUnique;
+using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
 
 namespace WorldPredownload
 {
@@ -43,12 +45,36 @@ namespace WorldPredownload
         {
             if (__0.Equals("Join"))
                 MelonCoroutines.Start(FriendButton.UpdateText());
-            else
-                FriendButton.button.SetActive(false);
         }
     }
 
 
-    
+    class SetupSocialMenuPatch
+    {
+        public static void Patch()
+        {
+            Main.harmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Single(
+                m => m.ReturnType == typeof(void)
+                && m.GetParameters().Length == 3
+                && m.GetParameters()[0].ParameterType == typeof(APIUser)
+                && m.GetParameters()[1].ParameterType == typeof(InfoType)
+                && m.GetParameters()[2].ParameterType == typeof(ListType)
+                ), 
+                null,
+                new HarmonyMethod(typeof(SetupSocialMenuPatch).GetMethod(nameof(Postfix)))
+            );
+        }
+
+        public static void Postfix(APIUser __0) //, InfoType __1, ListType __2 = ListType.None
+        {
+            if (!__0.isFriend)
+                FriendButton.button.SetActive(false);
+            else if (Utilities.isInSameWorld(__0))
+                FriendButton.button.SetActive(false);
+
+
+        }
+    }
+
 
 }
