@@ -190,7 +190,7 @@ namespace WorldPredownload
 
         public static bool isInSameWorld(APIUser user)
         {
-            if (user.worldId.Equals(VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_Player_0.prop_APIUser_0.worldId))
+            if (user.location.Contains(RoomManager.field_Internal_Static_ApiWorld_0.id))
                 return true;
             else
                 return false;

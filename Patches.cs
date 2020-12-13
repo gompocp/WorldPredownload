@@ -45,6 +45,8 @@ namespace WorldPredownload
         {
             if (__0.Equals("Join"))
                 MelonCoroutines.Start(FriendButton.UpdateText());
+            else
+                FriendButton.button.SetActive(false);
         }
     }
 
@@ -71,6 +73,11 @@ namespace WorldPredownload
                 FriendButton.button.SetActive(false);
             else if (Utilities.isInSameWorld(__0))
                 FriendButton.button.SetActive(false);
+            else
+            {
+                FriendButton.button.SetActive(true);
+                MelonCoroutines.Start(FriendButton.UpdateText());
+            }
 
 
         }

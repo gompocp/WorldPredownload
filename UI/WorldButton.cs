@@ -35,6 +35,7 @@ namespace WorldPredownload.UI
                 Utilities.DeselectClickedButton(button);
                 try
                 {
+                    Utilities.DeselectClickedButton(button);
                     if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                     {
                         WorldDownloadManager.CancelDownload();

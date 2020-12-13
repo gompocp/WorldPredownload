@@ -160,6 +160,7 @@ namespace WorldPredownload.DownloadManager
                 {
                     Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
+                    _ = FriendButton.userInfo ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
                     Utilities.ShowPage(FriendButton.userInfo);
                     FriendButton.userInfo.Method_Public_Void_APIUser_PDM_0(FriendButton.user);
                     ResetButtons();

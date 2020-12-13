@@ -85,8 +85,6 @@ namespace WorldPredownload.UI
         public static IEnumerator UpdateText()
         {
             while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
-            //if (!GetUserInfo().user.isFriend) yield break;
-            //if (!GetUserInfo().user.world) yield break;
             button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {

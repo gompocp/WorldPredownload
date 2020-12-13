@@ -8,7 +8,7 @@ using WorldPredownload.Components;
 using WorldPredownload.UI;
 
 [assembly: MelonGame("VRChat", "VRChat")]
-[assembly: MelonInfo(typeof(WorldPredownload.Main), "WorldPredownload", "1.2.1", "gompo#6956", null)]
+[assembly: MelonInfo(typeof(WorldPredownload.Main), "WorldPredownload", "1.2.4", "gompo#6956", null)]
 
 
 namespace WorldPredownload
