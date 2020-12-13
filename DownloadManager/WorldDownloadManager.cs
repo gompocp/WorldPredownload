@@ -24,7 +24,9 @@ namespace WorldPredownload.DownloadManager
         private static DownloadFromType downloadFromType;
 
 
-        public static void CancelDownload() => cancelled = true;
+        public static void CancelDownload() {
+            if(downloading) cancelled = true;
+        }
 
         public static void OnDownloadProgress(UnityEngine.Networking.UnityWebRequest request)
         {
