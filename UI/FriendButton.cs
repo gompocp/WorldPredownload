@@ -17,7 +17,7 @@ namespace WorldPredownload.UI
         public static string userID { get; set; } = "";
         public static APIUser user { get; set; }
         public static string worldID { get; set; } = "";
-        public static PageUserInfo userInfo { get; set; }
+        public static PageUserInfo userInfo { get; set; } = null;
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Playlists";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/MenuContent/Screens/UserInfo/User Panel";
@@ -47,6 +47,7 @@ namespace WorldPredownload.UI
                         return;
                     }
                     user = GetUserInfo().user;
+                    userInfo = GetUserInfo();
                     userID = user.id;
                     worldID = GetUserInfo().field_Private_ApiWorld_0.id;
                     WorldDownloadManager.DownloadWorld(GetUserInfo().field_Private_ApiWorld_0, DownloadFromType.Friend);
@@ -59,8 +60,8 @@ namespace WorldPredownload.UI
             background.localScale = new Vector3(background.localScale.x, Constants.FRIEND_PANEL_YSCALE, background.localScale.z);
             background.localPosition = new Vector3(background.localPosition.x, Constants.FRIEND_PANEL_YPOS, background.localPosition.z);
 
-            Transform userInfo = GameObject.Find(PATH_TO_INFO_PANEL).transform;
-            userInfo.localPosition = new Vector3(userInfo.localPosition.x, Constants.SOCIAL_PANEL_YPOS, userInfo.localPosition.z);
+            Transform userInfoPanel = GameObject.Find(PATH_TO_INFO_PANEL).transform;
+            userInfoPanel.localPosition = new Vector3(userInfoPanel.localPosition.x, Constants.SOCIAL_PANEL_YPOS, userInfoPanel.localPosition.z);
         }
 
 
