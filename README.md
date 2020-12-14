@@ -9,9 +9,6 @@
 -If you go to another world while downloading, it'll cancel the download <br>
 -Performance may degrade for split second on world enter due to you having a large cache size <br>
 
-# Todo <br>
--Possibly Add a 15 second timer on the preload option for invites to prevent api spam <br>
-
 # Changes <br>
 -Popup will no longer show when you have a worldInfo page or userinfo open in the menu as you can see download status there <br>
 -Mod will now check to see if the world has been downloaded previously using asset hashing <br>
