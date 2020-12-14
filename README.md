@@ -1,5 +1,6 @@
 # WorldPredownload <br>
--Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + more, and some of the way stuff is structured is also inspired by his utilities file<br>
+
+-Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file<br>
 -Credit to [Ben](https://github.com/BenjaminZehowlt/) for xref scanning mechanism from https://github.com/BenjaminZehowlt/DynamicBonesSafety <br>
 -Credit to [KeafyisHere](https://github.com/KeafyIsHere/Custom-MonoBehaviours-example) for custom monobehaviour example <br>
 -You can hit preload on an invite, on a world page or on a friend <br>
