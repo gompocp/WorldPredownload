@@ -11,5 +11,6 @@
 
 # Changes <br>
 -Popup will no longer show when you have a worldInfo page or userinfo open in the menu as you can see download status there <br>
--Mod will now check to see if the world has been downloaded previously using asset hashing <br>
+-Mod will now check to see if the world has been downloaded previously except on invite notification menu <br><br>
+
 
