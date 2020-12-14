@@ -13,16 +13,17 @@ namespace WorldPredownload.UI
 {
     public static class InviteButton
     {
-        public static GameObject button { get; set; }
+        public static GameObject button;
         public static bool canChangeText { get; set; } = true;
         public static Notification notification { get; set; } = null;
+
+        private static bool canDownload = true;
+
+        public static bool show { get; set; } = true;
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/NotificationInteractMenu/BlockButton";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/NotificationInteractMenu";
         private const string UNABLE_TO_CONVERT_WORLDID = "Error Creating ApiWorld From Notification";
-        
-
-        //private static
 
         public static void Setup()
         {
@@ -38,20 +39,32 @@ namespace WorldPredownload.UI
                     WorldDownloadManager.CancelDownload();
                     return;
                 }
+
+                if (!canDownload)
+                {
+                    if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Please wait a while before trying to download again");
+                    return;
+                }
+                //MelonCoroutines.Start(InviteButtonTimer(15));
+
                 //Credit: https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs
                 API.Fetch<ApiWorld>(Utilities.GetSelectedNotification().GetWorldID(),
                 new Action<ApiContainer>(
                     container =>
                     {
                         notification = Utilities.GetSelectedNotification();
+                        
                         WorldDownloadManager.InstanceIDTags = Utilities.GetSelectedNotification().GetInstanceIDWithTags();
                         WorldDownloadManager.DownloadWorld(container.Model.Cast<ApiWorld>(), DownloadFromType.Invite);
                     }),
                 new Action<ApiContainer>(delegate {
                     MelonLogger.Log(UNABLE_TO_CONVERT_WORLDID);
                 }));
+                
             }));
+            button.SetActive(show);
         }
+
 
         public static void UpdateTextDownloadStopped()
         {
@@ -73,7 +86,7 @@ namespace WorldPredownload.UI
         public static void UpdateText()
         {
             if(Utilities.GetSelectedNotification().notificationType.Equals("invite")) {
-                button.SetActive(true);
+                if (show) button.SetActive(true);
                 if (WorldDownloadManager.downloading)
                 {
                     if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.currentDownloadingID))
@@ -91,7 +104,24 @@ namespace WorldPredownload.UI
                 }
             } 
             else
-                button.SetActive(false);
+                if (show) button.SetActive(false);
         }
+
+        public static System.Collections.IEnumerator InviteButtonTimer(int time)
+        {
+            canDownload = false;
+            for (int i = time; i >= 0; i--)
+            {
+#if DEBUG
+                MelonLogger.Log(i);
+#endif
+                if (!WorldDownloadManager.downloading)
+                    button.SetText($"Time Left:{i}");
+                yield return new WaitForSeconds(1);
+            }
+            canDownload = true;
+            UpdateText();
+        }
+
     }
 }

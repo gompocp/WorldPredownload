@@ -14,6 +14,7 @@ namespace WorldPredownload
         public const string WORLD_BUTTON_NAME = "PreloadWorldButton";
         public const string DOWNLOAD_STATUS_NAME = "DownloadStatusText";
         public const string DOWNLOAD_STATUS_IDLE_TEXT = "Not Downloading";
+        public const string BUTTON_INVITE_OVERWRITE_TEXT = "Accept";
         public const string BUTTON_IDLE_TEXT = "Predownload";
         public const string BUTTON_BUSY_TEXT = "Cancel other download";
         public const string BUTTON_ALREADY_DOWNLOADED_TEXT = "Downloaded";

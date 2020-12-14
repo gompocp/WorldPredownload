@@ -1,6 +1,9 @@
 ﻿using Harmony;
 using MelonLoader;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEngine.UI;
 using VRC.Core;
 using VRC.UI;
 using WorldPredownload.Cache;
@@ -29,11 +32,58 @@ namespace WorldPredownload
         static void Postfix(ApiWorld __0) => WorldButton.UpdateText(__0);
     }
 
+
+    class SetupAcceptNotificationPatch
+    {
+        public static void Patch()
+        {
+            MethodInfo acceptNotificationMethod = typeof(QuickMenu).GetMethods(BindingFlags.Public | BindingFlags.Instance).First(
+                   m => m.GetParameters().Length == 0 && m.XRefScanFor("AcceptNotification"));
+
+            Main.HarmonyInstance.Patch(
+                acceptNotificationMethod,
+                new HarmonyMethod(typeof(SetupAcceptNotificationPatch).GetMethod(nameof(Prefix))));
+        }
+
+        public static bool Prefix()
+        {
+            if (Main.overwriteAcceptButton)
+            {
+                InviteButton.button.GetComponent<Button>().onClick.Invoke();
+                return false;
+            }
+            else
+                return true;
+        }
+    }
+
+    class SetupAdvancedInvitesPatch
+    {
+        public static void Patch()
+        {
+            //                                                                                                                     GetType() was being stupid so yeah...          
+            var acceptNotificationMethod = MelonHandler.Mods.First(m => m.Info.Name.Equals("AdvancedInvites")).Assembly.GetTypes().Single(t => t.Name.Equals("AdvancedInviteSystem")).GetMethod("AcceptNotificationPatch", BindingFlags.NonPublic | BindingFlags.Static);
+            Main.HarmonyInstance.Patch(acceptNotificationMethod, new HarmonyMethod(typeof(SetupAdvancedInvitesPatch).GetMethod(nameof(Prefix))));
+        }
+
+        public static bool Prefix()
+        {
+            if (Main.overwriteAcceptButton)
+            {
+                InviteButton.button.GetComponent<Button>().onClick.Invoke();
+                return false;
+            }
+            else
+                return true;
+        }
+    }
+
+
     class SetupUserInfoPatch
     {
         public static void Patch()
         {
-            Main.harmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Where(m => m.ReturnType == typeof(void)
+            Main.HarmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Where(m => m.ReturnType == typeof(void)
                 && m.GetParameters().Length == 2
                 && m.GetParameters()[0].ParameterType == typeof(string)
                 && m.GetParameters()[1].ParameterType == typeof(bool)).ToList()[1],
@@ -55,7 +105,7 @@ namespace WorldPredownload
     {
         public static void Patch()
         {
-            Main.harmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Single(
+            Main.HarmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Single(
                 m => m.ReturnType == typeof(void)
                 && m.GetParameters().Length == 3
                 && m.GetParameters()[0].ParameterType == typeof(APIUser)

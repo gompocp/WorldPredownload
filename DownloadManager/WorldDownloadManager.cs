@@ -26,7 +26,11 @@ namespace WorldPredownload.DownloadManager
 
 
         public static void CancelDownload() {
-            if(downloading) cancelled = true;
+            if (downloading)
+            {
+                if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Download Cancelled");
+                cancelled = true;
+            }
         }
 
         public static void OnDownloadProgress(UnityEngine.Networking.UnityWebRequest request)
@@ -50,6 +54,7 @@ namespace WorldPredownload.DownloadManager
 
         public static void OnError(string url, string message, LoadErrorReason reason)
         {
+            
             Utilities.ClearErrors();
             WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
             downloading = false;
@@ -189,6 +194,7 @@ namespace WorldPredownload.DownloadManager
             
             if (!downloading)
             {
+                if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Starting Download");
                 downloadFromType = downloadType;
                 world = apiWorld;
                 currentDownloadingID = string.Copy(apiWorld.id);
@@ -203,6 +209,7 @@ namespace WorldPredownload.DownloadManager
                     DelegateSupport.ConvertDelegate<OnDownloadError>(OnErrorDel),
                     true,
                     UnpackType.EnumValue1);
+                if(downloadType == DownloadFromType.Invite) MelonCoroutines.Start(InviteButton.InviteButtonTimer(15));
             }
             else
             {

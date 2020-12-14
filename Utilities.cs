@@ -14,6 +14,7 @@ using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
 using WorldPredownload.UI;
+using UnityEngine.UI;
 
 namespace WorldPredownload
 {
@@ -160,7 +161,6 @@ namespace WorldPredownload
             GetPushUIPageDelegate(page);
         }
 
-
         public static AssetBundleDownloadManager GetAssetBundleDownloadManager()
         {
             return AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0;
@@ -214,6 +214,14 @@ namespace WorldPredownload
                 return false;
         }
 
+
+        public static void Swap<T>(ref T left, ref T right)
+        {
+            T temp = left;
+            left = right;
+            right = temp;
+        }
+
         public static string ByteArrayToString(byte[] ba)
         {
             StringBuilder hex = new StringBuilder(ba.Length * 2);
@@ -251,7 +259,7 @@ namespace WorldPredownload
                 xref => xref.Type == XrefType.Global && xref.ReadAsObject()?.ToString().IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-            private static bool checkXrefNoStrings(MethodBase m)
+        private static bool checkXrefNoStrings(MethodBase m)
         {
             try
             {
@@ -265,6 +273,11 @@ namespace WorldPredownload
             catch (Exception e) { MelonLogger.Log("For loop failed:" + e); }
             return false;
 
+        }
+
+        public static void QueueHudMessage(string msg)
+        {
+            VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add(msg);
         }
 
 
