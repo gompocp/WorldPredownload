@@ -13,6 +13,7 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
+using WorldPredownload.UI;
 
 namespace WorldPredownload
 {
@@ -188,6 +189,23 @@ namespace WorldPredownload
             }
         }
 
+        public static void GoToWorld(ApiWorld apiWorld, string tags)
+        {
+            if (Main.tryUseAdvancedInvitePopup && Main.AdvancedInvites)
+            {
+                try
+                {
+                    AdvancedInvites.InviteHandler.HandleInvite(InviteButton.notification);
+                }
+                catch
+                {
+                    MelonLogger.LogError("Unable to execute Advanced Invite's Invite Handler Func");
+                }
+            }
+            else
+                new PortalInternal().Method_Private_Void_String_String_PDM_0(apiWorld.id, tags);
+        }
+
         public static bool isInSameWorld(APIUser user)
         {
             if (user.location.Contains(RoomManager.field_Internal_Static_ApiWorld_0.id))
@@ -203,6 +221,9 @@ namespace WorldPredownload
                 hex.AppendFormat("{0:x2}", b);
             return hex.ToString();
         }
+
+        public static bool HasMod(string modName) =>
+            MelonHandler.Mods.Any(mod => mod.Info.Name.Equals(modName));
 
         public static bool CheckXrefStrings(MethodBase m, List<string> keywords)
         {

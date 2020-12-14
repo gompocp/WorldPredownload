@@ -69,9 +69,14 @@ namespace WorldPredownload
 
         public static void Postfix(APIUser __0) //, InfoType __1, ListType __2 = ListType.None
         {
+#if DEBUG
+            MelonLogger.Log(__0.location);
+#endif
             if (!__0.isFriend)
                 FriendButton.button.SetActive(false);
             else if (Utilities.isInSameWorld(__0))
+                FriendButton.button.SetActive(false);
+            else if (__0.location.ToLower().Equals("private"))
                 FriendButton.button.SetActive(false);
             else
             {
@@ -82,6 +87,24 @@ namespace WorldPredownload
 
         }
     }
+#if DEBUG
+    [HarmonyPatch(typeof(RoomManager), "Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0")]
+    class RoomManagerGoToWorld
+    {
+        static void Prefix(ApiWorld __0, ApiWorldInstance __1, string __2, int __3)
+        {
+            MelonLogger.Log($"{__0.id}, {__1.instanceTags.ToString()}, {__2}, {__3}");
+        }
+    }
+    [HarmonyPatch(typeof(RoomManager), "Method_Public_Static_String_ApiWorldInstance_0")]
+    class GetPhotonRoomID
+    {
+        static void Postfix(ApiWorldInstance __0, ref string __result)
+        {
+            MelonLogger.Log($"PhotonRoomId Instance Tags:{__0.instanceTags}, Result:{__result}");
+        }
+    }
+#endif
 
 
 }

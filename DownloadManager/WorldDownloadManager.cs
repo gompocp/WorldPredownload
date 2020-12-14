@@ -22,6 +22,7 @@ namespace WorldPredownload.DownloadManager
         private static bool cancelled = false;
         private static ApiWorld world;
         private static DownloadFromType downloadFromType;
+        public static string InstanceIDTags { get; set; } = null;
 
 
         public static void CancelDownload() {
@@ -81,16 +82,23 @@ namespace WorldPredownload.DownloadManager
             switch (downloadFromType)
             {
                 case DownloadFromType.Friend:
-                    DisplayFriendPopup();
+                    if (!Main.autoFollowFriends)
+                        DisplayFriendPopup();
+                    else
+                        Utilities.GoToWorld(world, InstanceIDTags);
+                        ResetButtons();
                     break;
                 case DownloadFromType.Invite:
-                    DisplayInvitePopup();
+                    if (!Main.autoFollowInvites)
+                        DisplayInvitePopup();
+                    else
+                        Utilities.GoToWorld(world, InstanceIDTags);
+                        ResetButtons();
                     break;
                 case DownloadFromType.World:
                     DisplayWorldPopup();
                     break;
             }
-
         }
 
         public static void ResetButtons()
@@ -102,6 +110,8 @@ namespace WorldPredownload.DownloadManager
             FriendButton.user = null;
             FriendButton.worldID = "";
             FriendButton.userID = null;
+            InstanceIDTags = null;
+            InviteButton.notification = null;
         }
 
         public static void DisplayWorldPopup()

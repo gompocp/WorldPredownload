@@ -15,11 +15,14 @@ namespace WorldPredownload.UI
     {
         public static GameObject button { get; set; }
         public static bool canChangeText { get; set; } = true;
+        public static Notification notification { get; set; } = null;
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/NotificationInteractMenu/BlockButton";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/NotificationInteractMenu";
         private const string UNABLE_TO_CONVERT_WORLDID = "Error Creating ApiWorld From Notification";
         
+
+        //private static
 
         public static void Setup()
         {
@@ -40,6 +43,8 @@ namespace WorldPredownload.UI
                 new Action<ApiContainer>(
                     container =>
                     {
+                        notification = Utilities.GetSelectedNotification();
+                        WorldDownloadManager.InstanceIDTags = Utilities.GetSelectedNotification().GetInstanceIDWithTags();
                         WorldDownloadManager.DownloadWorld(container.Model.Cast<ApiWorld>(), DownloadFromType.Invite);
                     }),
                 new Action<ApiContainer>(delegate {

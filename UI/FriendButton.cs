@@ -50,6 +50,7 @@ namespace WorldPredownload.UI
                     userInfo = GetUserInfo();
                     userID = user.id;
                     worldID = GetUserInfo().field_Private_ApiWorld_0.id;
+                    WorldDownloadManager.InstanceIDTags = GetUserInfo().user.location.Split(':')[1];
                     WorldDownloadManager.DownloadWorld(GetUserInfo().field_Private_ApiWorld_0, DownloadFromType.Friend);
                 }
                 catch { MelonLogger.LogWarning(CLICK_ERROR_MESSAGE); }
@@ -107,12 +108,13 @@ namespace WorldPredownload.UI
                 if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else button.SetText(Constants.BUTTON_IDLE_TEXT);
-                    /*
-                try
-                {
-                }
-                catch(Exception e) { MelonLogger.Log($"Failed to check cache for world download: {e.Message}"); }
-                */
+                
+                /*
+            try
+            {
+            }
+            catch(Exception e) { MelonLogger.Log($"Failed to check cache for world download: {e.Message}"); }
+            */
             }
             
         }

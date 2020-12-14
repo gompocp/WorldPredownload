@@ -48,6 +48,10 @@ namespace WorldPredownload
 
         public static string GetWorldID(this Notification notification) =>
             notification.details["worldId"].ToString().Split(':')[0];
+
+        public static string GetInstanceIDWithTags(this Notification notification) =>
+            notification.details["worldId"].ToString().Split(':')[1];
+
     }
 
 }
