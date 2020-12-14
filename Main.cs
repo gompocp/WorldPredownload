@@ -1,5 +1,7 @@
 ﻿using Harmony;
 using MelonLoader;
+using System.Linq;
+using System.Reflection;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using WorldPredownload.Components;
@@ -65,5 +67,17 @@ namespace WorldPredownload
         }
 
         public static void OnNotificationMenuOpen() => InviteButton.UpdateText();
+
+        public override void OnUpdate()
+        {
+            if (Input.GetKeyUp(KeyCode.F8))
+            {
+                MethodInfo acceptNotificationMethod = typeof(QuickMenu).GetMethods(BindingFlags.Public | BindingFlags.Instance).First(
+                   m => m.GetParameters().Length == 0 && m.XRefScanFor("AcceptNotification"));
+                Main.HarmonyInstance.GetPatchInfo(acceptNotificationMethod);
+                
+            }
+        }
+
     }
 }

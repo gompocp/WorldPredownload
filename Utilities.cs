@@ -33,6 +33,8 @@ namespace WorldPredownload
 
         private static PushUIPageDelegate pushUIPageDelegate;
 
+        private static AdvancedInvitesInviteDelegate advancedInvitesInviteDelegate;
+
         private static DownloadWorldDelegate GetDownloadWorldDelegate
         {
             get
@@ -134,7 +136,43 @@ namespace WorldPredownload
             }
         }
 
+        private static AdvancedInvitesInviteDelegate GetAdvancedInvitesInviteDelegate
+        {
+            get
+            {
+                if (advancedInvitesInviteDelegate != null) return advancedInvitesInviteDelegate;
 
+                //InviteHandler
+                var handleNotificationMethod = MelonHandler.Mods.First(
+                    m => m.Info.Name.Equals("AdvancedInvites")).Assembly.GetTypes().Single(
+                        t => t.Name.Equals("InviteHandler")).GetMethods(BindingFlags.Public | BindingFlags.Static).Single(
+                            me => me.GetParameters().Length == 1 
+                            && me.GetParameters()[0].ParameterType == typeof(Notification) // Could probably use method name here but ¯\_(ツ)_/¯ 
+                        );
+
+                advancedInvitesInviteDelegate = (AdvancedInvitesInviteDelegate)Delegate.CreateDelegate(
+                    typeof(AdvancedInvitesInviteDelegate),
+                    handleNotificationMethod
+                );
+                return advancedInvitesInviteDelegate;
+            }
+        }
+
+        public static void AdvancedInvitesHandleInvite(Notification notification)
+        {
+#if DEBUG
+            try
+            {
+                GetAdvancedInvitesInviteDelegate(notification);
+            }
+            catch (Exception e)
+            {
+                MelonLogger.LogError($"Beep boop, Something went wrong trying to used advanced invites {e}");
+            }
+#else
+            GetAdvancedInvitesInviteDelegate(notification);
+#endif
+        }
 
         public static void DownloadApiWorld(ApiWorld world, OnDownloadProgress onProgress, OnDownloadComplete onSuccess, OnDownloadError onError, bool bypassDownloadSizeLimit, UnpackType unpackType)
         {
@@ -195,11 +233,11 @@ namespace WorldPredownload
             {
                 try
                 {
-                    AdvancedInvites.InviteHandler.HandleInvite(InviteButton.notification);
+                    GetAdvancedInvitesInviteDelegate(InviteButton.notification);
                 }
-                catch
+                catch(Exception e)
                 {
-                    MelonLogger.LogError("Unable to execute Advanced Invite's Invite Handler Func");
+                    MelonLogger.LogError("Unable to execute Advanced Invite's Invite Handler Func" + e);
                 }
             }
             else
@@ -302,6 +340,8 @@ namespace WorldPredownload
         );
 
         private delegate void ClearErrorsDelegate();
+
+        private delegate void AdvancedInvitesInviteDelegate(Notification notification);
 
         private delegate void DownloadWorldDelegate(ApiWorld world, OnDownloadProgress onProgress, OnDownloadComplete onSuccess, OnDownloadError onError, bool bypassDownloadSizeLimit, UnpackType unpackType);
 
