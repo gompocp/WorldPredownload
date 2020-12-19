@@ -2,7 +2,7 @@
 
 -Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file<br>
 -Credit to [Ben](https://github.com/BenjaminZehowlt/) for xref scanning mechanism from https://github.com/BenjaminZehowlt/DynamicBonesSafety <br>
--Credit to [KeafyisHere](https://github.com/KeafyIsHere/Custom-MonoBehaviours-example) for custom monobehaviour example <br>
+-Credit to [Knah](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) for enable disable listener <br>
 -You can hit preload on an invite, on a world page or on a friend <br>
 -You can see your download status bottom right of quick menu <br>
 -Currently you can only download/preload one world at a time <br>
