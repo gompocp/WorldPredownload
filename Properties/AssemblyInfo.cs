@@ -1,20 +1,21 @@
-﻿using System.Resources;
+﻿using MelonLoader;
+using WorldPredownload;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using MelonLoader;
 
-[assembly: AssemblyTitle("WorldPredownload")]
+
+[assembly: AssemblyTitle(ModInfo.Name)]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WorldPredownload")]
-[assembly: AssemblyCopyright("Created by gompo")]
+[assembly: AssemblyProduct(ModInfo.Name)]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.3.2.1")]
-[assembly: AssemblyFileVersion("1.3.2.1")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: AssemblyVersion(ModInfo.Version)]
+[assembly: AssemblyFileVersion(ModInfo.Version)]
+[assembly:
+    MelonInfo(typeof(WorldPredownload.WorldPredownload), ModInfo.Name, ModInfo.Version, ModInfo.Author,
+        ModInfo.DownloadLink)]
 [assembly: MelonGame("VRChat", "VRChat")]
-[assembly: MelonOptionalDependencies("AdvancedInvites")]
-[assembly: MelonInfo(typeof(WorldPredownload.Main), "WorldPredownload", "1.3.2.1", "gompo#6956", "https://github.com/gompocp/WorldPredownload/releases")]

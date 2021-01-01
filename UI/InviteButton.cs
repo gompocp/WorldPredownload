@@ -1,67 +1,32 @@
 ﻿using MelonLoader;
 using System;
 using Transmtn.DTO.Notifications;
-using UnhollowerRuntimeLib;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 using VRC.Core;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 
 namespace WorldPredownload.UI
 {
-    public static class InviteButton
+    public class InviteButton
     {
-        public static GameObject button;
+
         public static bool canChangeText { get; set; } = true;
-        public static Notification notification { get; set; } = null;
-
+        public static GameObject button { get; set; }
         private static bool canDownload = true;
-
-        public static bool show { get; set; } = true;
+        
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/NotificationInteractMenu/BlockButton";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/NotificationInteractMenu";
         private const string UNABLE_TO_CONVERT_WORLDID = "Error Creating ApiWorld From Notification";
 
-        public static void Setup()
+        public static void Setup(bool show)
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.INVITE_BUTTON_POS);
             button.SetName(Constants.INVITE_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
-            button.SetButtonAction(new Action(delegate
-            {
-                Utilities.DeselectClickedButton(button);
-                if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
-                {
-                    WorldDownloadManager.CancelDownload();
-                    return;
-                }
-
-                if (!canDownload)
-                {
-                    if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Please wait a while before trying to download again");
-                    return;
-                }
-                //MelonCoroutines.Start(InviteButtonTimer(15));
-
-                //Credit: https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs
-                API.Fetch<ApiWorld>(Utilities.GetSelectedNotification().GetWorldID(),
-                new Action<ApiContainer>(
-                    container =>
-                    {
-                        notification = Utilities.GetSelectedNotification();
-                        
-                        WorldDownloadManager.InstanceIDTags = Utilities.GetSelectedNotification().GetInstanceIDWithTags();
-                        WorldDownloadManager.DownloadWorld(container.Model.Cast<ApiWorld>(), DownloadFromType.Invite);
-                    }),
-                new Action<ApiContainer>(delegate {
-                    MelonLogger.Log(UNABLE_TO_CONVERT_WORLDID);
-                }));
-                
-            }));
+            button.SetButtonAction(onClick);
             button.SetActive(show);
         }
 
@@ -86,10 +51,9 @@ namespace WorldPredownload.UI
         public static void UpdateText()
         {
             if(Utilities.GetSelectedNotification().notificationType.Equals("invite")) {
-                if (show) button.SetActive(true);
                 if (WorldDownloadManager.downloading)
                 {
-                    if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.currentDownloadingID))
+                    if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))
                         canChangeText = true;
                     else
                     {
@@ -104,7 +68,7 @@ namespace WorldPredownload.UI
                 }
             } 
             else
-                if (show) button.SetActive(false);
+                button.SetActive(false);
         }
 
         public static System.Collections.IEnumerator InviteButtonTimer(int time)
@@ -112,9 +76,6 @@ namespace WorldPredownload.UI
             canDownload = false;
             for (int i = time; i >= 0; i--)
             {
-#if DEBUG
-                MelonLogger.Log(i);
-#endif
                 if (!WorldDownloadManager.downloading)
                     button.SetText($"Time Left:{i}");
                 yield return new WaitForSeconds(1);
@@ -122,6 +83,46 @@ namespace WorldPredownload.UI
             canDownload = true;
             UpdateText();
         }
+
+        public static Action onClick = delegate
+        {
+            Utilities.DeselectClickedButton(button);
+            if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text
+                .Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
+            {
+                WorldDownloadManager.CancelDownload();
+                return;
+            }
+
+            if (!canDownload)
+            {
+                Utilities.QueueHudMessage("Please wait a while before trying to download again");
+                return;
+            }
+            //MelonCoroutines.Start(InviteButtonTimer(15));
+
+            //Credit: https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs
+            API.Fetch<ApiWorld>(Utilities.GetSelectedNotification().GetWorldID(),
+                new Action<ApiContainer>(
+                    container =>
+                    {
+
+                        WorldDownloadManager.ProcessDownload(
+                            DownloadInfo.CreateInviteDownloadInfo(
+                                container.Model.Cast<ApiWorld>(),
+                                Utilities.GetSelectedNotification().GetInstanceIDWithTags(),
+                                DownloadType.Invite,
+                                Utilities.GetSelectedNotification()
+                            )
+                        );
+                    }),
+                new Action<ApiContainer>(delegate
+                {
+                    MelonLogger.Log(UNABLE_TO_CONVERT_WORLDID);
+                }));
+        };
+
+
 
     }
 }

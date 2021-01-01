@@ -4,6 +4,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using VRC.Core;
 
 namespace WorldPredownload
 {
@@ -51,6 +52,9 @@ namespace WorldPredownload
 
         public static string GetInstanceIDWithTags(this Notification notification) =>
             notification.details["worldId"].ToString().Split(':')[1];
+        
+        public static string GetInstanceIDWithTags(this ApiWorld apiWorld) =>
+            apiWorld.currentInstanceIdWithTags.Split(':')[1];
 
     }
 

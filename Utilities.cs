@@ -13,8 +13,8 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
+using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
-using UnityEngine.UI;
 
 namespace WorldPredownload
 {
@@ -229,11 +229,11 @@ namespace WorldPredownload
 
         public static void GoToWorld(ApiWorld apiWorld, string tags)
         {
-            if (Main.tryUseAdvancedInvitePopup && Main.AdvancedInvites)
+            if (ModSettings.tryUseAdvancedInvitePopup && ModSettings.AdvancedInvites)
             {
                 try
                 {
-                    GetAdvancedInvitesInviteDelegate(InviteButton.notification);
+                    GetAdvancedInvitesInviteDelegate(WorldDownloadManager.DownloadInfo.Notification);
                 }
                 catch(Exception e)
                 {

@@ -8,64 +8,39 @@ using WorldPredownload.DownloadManager;
 
 namespace WorldPredownload.UI
 {
-    public static class WorldButton
+    public class WorldButton
     {
-        public static GameObject button { get; set; }
         public static bool canChangeText { get; set; } = true;
-        public static string worldID { get; set; } = "";
-        public static ApiWorld apiWorld { get; set; }
-        public static ApiWorldInstance apiWorldInstance { get; set; }
-
-        public static PageWorldInfo worldInfo { get; set; }
-
-
+        public static GameObject button { get; set; }
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/WorldInfo/ReportButton";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/MenuContent/Screens/WorldInfo";
         private const string PATH_TO_WORLDINFO = "UserInterface/MenuContent/Screens/WorldInfo";
 
-        public static void Setup()
+        public static void Setup(bool show)
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.WORLD_BUTTON_POS);
-            button.SetActive(true);
+            button.SetActive(show);
             button.SetName(Constants.WORLD_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
-            button.SetButtonAction(new Action(delegate
-            {
-                Utilities.DeselectClickedButton(button);
-                try
-                {
-                    Utilities.DeselectClickedButton(button);
-                    if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
-                    {
-                        WorldDownloadManager.CancelDownload();
-                        return;
-                    }
-                    worldInfo = GetWorldInfo();
-                    worldID = string.Copy(GetWorldInfo().field_Private_ApiWorld_0.id);
-                    apiWorldInstance = GetWorldInfo().worldInstance;
-                    
-                    WorldDownloadManager.DownloadWorld(GetWorldInfo().prop_ApiWorld_0, DownloadFromType.World);
-                }
-                catch(Exception e) { MelonLogger.Log($"Exception Occured Here: {e}"); }
-            }));
+            button.SetButtonAction(onClick);
         }
 
         public static void UpdateText(ApiWorld world)
         {
 
-            if (WorldDownloadManager.downloading)
+            if (WorldDownloadManager.downloading && WorldDownloadManager.DownloadInfo != null)
             {
-                if (world.id.Equals(WorldButton.worldID))
-                {
-                    canChangeText = true;
+                if (world.id.Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))
+                    {
+                        canChangeText = true;
+                    }
+                    else
+                    {
+                        canChangeText = false;
+                        button.SetText(Constants.BUTTON_BUSY_TEXT);
+                    }
                 }
-                else
-                {
-                    canChangeText = false;
-                    button.SetText(Constants.BUTTON_BUSY_TEXT);
-                }
-            }
             else
             {
                 if (CacheManager.HasDownloadedWorld(world.id, world.version))
@@ -79,7 +54,7 @@ namespace WorldPredownload.UI
         {
             try
             {
-                if (CacheManager.HasDownloadedWorld(GetWorldInfo().field_Private_ApiWorld_0.id, GetWorldInfo().field_Private_ApiWorld_0.version))
+                if (CacheManager.HasDownloadedWorld(WorldDownloadManager.DownloadInfo.ApiWorld.id, WorldDownloadManager.DownloadInfo.ApiWorld.version))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else
                     button.SetText(Constants.BUTTON_IDLE_TEXT);
@@ -92,5 +67,30 @@ namespace WorldPredownload.UI
         {
             return GameObject.Find(PATH_TO_WORLDINFO).GetComponent<VRC.UI.PageWorldInfo>();
         }
+        
+        public static Action onClick = delegate
+        {
+            Logger.Log("Received Click");
+            Utilities.DeselectClickedButton(button);
+            try
+            {
+                Utilities.DeselectClickedButton(button);
+                if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
+                {
+                    WorldDownloadManager.CancelDownload();
+                    return;
+                }
+
+                WorldDownloadManager.ProcessDownload(
+                    DownloadInfo.CreateWorldPageDownloadInfo(
+                        GetWorldInfo().field_Private_ApiWorld_0,
+                        GetWorldInfo().worldInstance.tagsOnly,
+                        DownloadType.World,
+                        GetWorldInfo()
+                    )
+                );
+            }
+            catch(Exception e) { MelonLogger.LogError($"Exception Occured In Setup For World Download: {e}"); }
+        };
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 
@@ -11,19 +11,12 @@ namespace WorldPredownload.Components
         
         [method:HideFromIl2Cpp]
         public event Action? OnDisabled;
-        
-        public NotificationMenuListener(IntPtr obj0) : base(obj0)
-        {
-        }
 
-        private void OnEnable()
-        {
-            OnEnabled?.Invoke();
-        }
+        public NotificationMenuListener(IntPtr obj0) : base(obj0) {}
 
-        private void OnDisable()
-        {
-            OnDisabled?.Invoke();
-        }
+        private void OnEnable() => OnEnabled?.Invoke();
+
+
+        private void OnDisable() => OnDisabled?.Invoke();
     }
 }

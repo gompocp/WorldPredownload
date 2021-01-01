@@ -1,60 +1,36 @@
-﻿using MelonLoader;
-using System;
+﻿using System;
 using System.Collections;
+using MelonLoader;
 using UnityEngine;
-using VRC.Core;
 using VRC.UI;
+using WorldPredownload;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 
 namespace WorldPredownload.UI
 {
-    class FriendButton
+    public class FriendButton 
     {
-
-        public static GameObject button { get; set; }
         public static bool canChangeText { get; set; } = true;
-        public static string userID { get; set; } = "";
-        public static APIUser user { get; set; }
-        public static string worldID { get; set; } = "";
-        public static PageUserInfo userInfo { get; set; } = null;
+        public static GameObject button { get; set; }
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Playlists";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/MenuContent/Screens/UserInfo/User Panel";
         private const string GAMEOBJECT_NAME = "PreloadUserButton";
-        private const string BUTTON_DEFAULT_TEXT = "Preload";
+        private const string BUTTON_DEFAULT_TEXT = "Predownload";
         private const string PATH_TO_GAMEOBJECT_TO_DESTROY = "UserInterface/MenuContent/Screens/UserInfo/User Panel/PreloadWorld/PlaylistsButton/Image/Icon_New";
         private const string PATH_TO_USERINFO = "UserInterface/MenuContent/Screens/UserInfo";
         private const string PATH_TO_BACKGROUND = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Panel";
         private const string PATH_TO_INFO_PANEL = "UserInterface/MenuContent/Screens/UserInfo/User Panel";
         private const string CLICK_ERROR_MESSAGE = "User may have clicked too quickly";
-
-        public static void Setup()
+        public static void Setup(bool show)
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.FRIEND_BUTTON_POS);  //213f, 315f
-            button.SetActive(true);
+            button.SetActive(show);
             button.SetName(GAMEOBJECT_NAME);
             button.SetText(BUTTON_DEFAULT_TEXT);
-            button.SetButtonActionInChildren(new Action(delegate
-            {
-                Utilities.DeselectClickedButton(button);
-                try
-                {
-                    if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
-                    {
-                        WorldDownloadManager.CancelDownload();
-                        return;
-                    }
-                    user = GetUserInfo().user;
-                    userInfo = GetUserInfo();
-                    userID = user.id;
-                    worldID = GetUserInfo().field_Private_ApiWorld_0.id;
-                    WorldDownloadManager.InstanceIDTags = GetUserInfo().user.location.Split(':')[1];
-                    WorldDownloadManager.DownloadWorld(GetUserInfo().field_Private_ApiWorld_0, DownloadFromType.Friend);
-                }
-                catch { MelonLogger.LogWarning(CLICK_ERROR_MESSAGE); }
-            }));
+            button.SetButtonActionInChildren(onClick);
             GameObject.Destroy(GameObject.Find(PATH_TO_GAMEOBJECT_TO_DESTROY));
 
             Transform background = GameObject.Find(PATH_TO_BACKGROUND).transform;
@@ -64,8 +40,38 @@ namespace WorldPredownload.UI
             Transform userInfoPanel = GameObject.Find(PATH_TO_INFO_PANEL).transform;
             userInfoPanel.localPosition = new Vector3(userInfoPanel.localPosition.x, Constants.SOCIAL_PANEL_YPOS, userInfoPanel.localPosition.z);
         }
-
-
+        
+        public static PageUserInfo GetUserInfo()
+        {
+            return GameObject.Find(PATH_TO_USERINFO).GetComponent<PageUserInfo>();
+        }
+        
+        public static IEnumerator UpdateText()
+        {
+            while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
+            if(!ModSettings.overrideSocialPageButton) button.SetActive(true);
+            if (WorldDownloadManager.downloading)
+            {
+                if (GetUserInfo().user.id.Equals(WorldDownloadManager.DownloadInfo.PageUserInfo.user.id))
+                {
+                    canChangeText = true;
+                }
+                else
+                {
+                    canChangeText = false;
+                    button.SetText(Constants.BUTTON_BUSY_TEXT);
+                }
+            }
+            else
+            {
+                while (GetUserInfo().field_Private_ApiWorld_0 == null) yield return null;
+                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
+                    button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
+                else button.SetText(Constants.BUTTON_IDLE_TEXT);
+                
+            }
+        }
+        
         public static void UpdateTextDownloadStopped()
         {
             //Lazy way to check if the user menu is up
@@ -82,46 +88,32 @@ namespace WorldPredownload.UI
             }
             canChangeText = true;
         }
-
-
-        public static IEnumerator UpdateText()
+        
+        
+        public static Action onClick = delegate
         {
-            while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
-            button.SetActive(true);
-            if (WorldDownloadManager.downloading)
-            {
-                if (GetUserInfo().user.id.Equals(userID))
-                {
-                    canChangeText = true;
-                }
-                else
-                {
-                    canChangeText = false;
-                    button.SetText(Constants.BUTTON_BUSY_TEXT);
-                }
-            }
-            else
-            {
-                while (GetUserInfo().field_Private_ApiWorld_0 == null) yield return null;
-                    //_ = GetUserInfo() ?? throw new NullReferenceException(message:"User Info Null");
-                    //_ = GetUserInfo().field_Private_ApiWorld_0 ?? throw new NullReferenceException(message: "User Info World Null");
-                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
-                    button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
-                else button.SetText(Constants.BUTTON_IDLE_TEXT);
-                
-                /*
+            Utilities.DeselectClickedButton(button);
             try
             {
-            }
-            catch(Exception e) { MelonLogger.Log($"Failed to check cache for world download: {e.Message}"); }
-            */
-            }
-            
-        }
+                if (WorldDownloadManager.downloading)
+                {
+                    WorldDownloadManager.CancelDownload();
+                    return;
+                }
 
-        public static PageUserInfo GetUserInfo()
-        {
-            return GameObject.Find(PATH_TO_USERINFO).GetComponent<PageUserInfo>();
-        }
+                WorldDownloadManager.ProcessDownload(
+                    DownloadInfo.CreateUserPageDownloadInfo(GetUserInfo().field_Private_ApiWorld_0,
+                        GetUserInfo().user.location.Split(':')[1],
+                        DownloadType.Friend,
+                        GetUserInfo()
+                    ));
+            }
+            catch
+            {
+                MelonLogger.LogWarning(CLICK_ERROR_MESSAGE);
+            }
+        };
+
+        
     }
 }

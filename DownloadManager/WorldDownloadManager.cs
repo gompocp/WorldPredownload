@@ -11,6 +11,7 @@ using VRC.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using MelonLoader;
+using VRC.UI;
 using WorldPredownload.Cache;
 
 namespace WorldPredownload.DownloadManager
@@ -18,112 +19,27 @@ namespace WorldPredownload.DownloadManager
     public static class WorldDownloadManager
     {
         public static bool downloading { get; set; } = false;
-        public static string currentDownloadingID { get; set; } = "";
-        private static bool cancelled = false;
-        private static ApiWorld world;
-        private static DownloadFromType downloadFromType;
-        public static string InstanceIDTags { get; set; } = null;
-
-
+        public static bool cancelled { get; set; }= false;
+        public static DownloadInfo DownloadInfo;
+        
         public static void CancelDownload() {
             if (downloading)
             {
-                if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Download Cancelled");
+                if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Download Cancelled");
                 cancelled = true;
             }
         }
-
-        public static void OnDownloadProgress(UnityEngine.Networking.UnityWebRequest request)
+        
+        public static void ClearDownload()
         {
-            if (cancelled)
-            {
-                request.Abort();
-                cancelled = false;
-                return;
-            }
-            string size = request.GetResponseHeader("Content-Length");
-            if (request.downloadProgress >= 0 && 0.9 >= request.downloadProgress)
-            {
-                string progress = ((request.downloadProgress / 0.9) * 100).ToString("0") + " % ";
-                WorldDownloadStatus.gameObject.SetText("Progress:" + progress);
-                if (InviteButton.canChangeText) InviteButton.button.SetText("Cancel: " + progress);
-                if (FriendButton.canChangeText) FriendButton.button.SetText("Cancel: " + progress);
-                if (WorldButton.canChangeText) WorldButton.button.SetText("Cancel: " + progress);
-            }
-        }
-
-        public static void OnError(string url, string message, LoadErrorReason reason)
-        {
-            
-            Utilities.ClearErrors();
-            WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
-            downloading = false;
-            FriendButton.UpdateTextDownloadStopped();
-            WorldButton.UpdateTextDownloadStopped();
-            InviteButton.UpdateTextDownloadStopped();
-            ResetButtons();
-            if (message.Contains("Request aborted")) return;
-            MelonLogger.LogWarning(url + " " + message + " " + reason);
-            Utilities.ShowDismissPopup(
-                Constants.DOWNLOAD_ERROR_TITLE,
-                Constants.DOWNLOAD_ERROR_MSG, 
-                Constants.DOWNLOAD_ERROR_BTN_TEXT, 
-                new Action(delegate {
-                    Utilities.HideCurrentPopup();
-                })
-            );
-        }
-
-
-        public static void OnComplete(AssetBundleDownload download)
-        {
-            downloading = false;
-            CacheManager.AddDirectory(CacheManager.ComputeAssetHash(world.id));
-            InviteButton.UpdateTextDownloadStopped();
-            FriendButton.UpdateTextDownloadStopped();
-            WorldButton.UpdateTextDownloadStopped();
-            WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
-            MelonLogger.Log("World Downloaded: " + download.field_Public_String_0);
-            switch (downloadFromType)
-            {
-                case DownloadFromType.Friend:
-                    if (!Main.autoFollowFriends)
-                        DisplayFriendPopup();
-                    else
-                        Utilities.GoToWorld(world, InstanceIDTags);
-                        ResetButtons();
-                    break;
-                case DownloadFromType.Invite:
-                    if (!Main.autoFollowInvites)
-                        DisplayInvitePopup();
-                    else
-                        Utilities.GoToWorld(world, InstanceIDTags);
-                        ResetButtons();
-                    break;
-                case DownloadFromType.World:
-                    DisplayWorldPopup();
-                    break;
-            }
-        }
-
-        public static void ResetButtons()
-        {
-            world = null;
-            WorldButton.apiWorld = null;
-            WorldButton.apiWorldInstance = null;
-            WorldButton.worldID = "";
-            FriendButton.user = null;
-            FriendButton.worldID = "";
-            FriendButton.userID = null;
-            InstanceIDTags = null;
-            InviteButton.notification = null;
+            DownloadInfo = null;
         }
 
         public static void DisplayWorldPopup()
         {
             if (GameObject.Find("UserInterface/MenuContent/Screens/WorldInfo").active)
             {
-                ResetButtons();
+                ClearDownload();
                 return;
             }
             Utilities.ShowOptionPopup(
@@ -134,15 +50,15 @@ namespace WorldPredownload.DownloadManager
                 {
                     Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/WorldsButton").GetComponent<Button>().onClick.Invoke();
-                    Utilities.ShowPage(WorldButton.worldInfo);
-                    WorldButton.worldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(world, WorldButton.apiWorldInstance);
-                    ResetButtons();
+                    Utilities.ShowPage(DownloadInfo.PageWorldInfo);
+                    DownloadInfo.PageWorldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(DownloadInfo.ApiWorld, DownloadInfo.PageWorldInfo.worldInstance);
+                    ClearDownload();
                 }),
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
-                    ResetButtons();
+                    ClearDownload();
                 })
             );
         }
@@ -155,7 +71,7 @@ namespace WorldPredownload.DownloadManager
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT, 
                 new Action(delegate {
                     Utilities.HideCurrentPopup();
-                    ResetButtons();
+                    ClearDownload();
                 })
             );
         }
@@ -164,7 +80,7 @@ namespace WorldPredownload.DownloadManager
         {
             if (GameObject.Find("UserInterface/MenuContent/Screens/UserInfo").active)
             {
-                ResetButtons();
+                ClearDownload();
                 return;
             }
             Utilities.ShowOptionPopup(
@@ -174,42 +90,37 @@ namespace WorldPredownload.DownloadManager
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
-                    GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
-                    _ = FriendButton.userInfo ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
-                    Utilities.ShowPage(FriendButton.userInfo);
-                    FriendButton.userInfo.Method_Public_Void_APIUser_PDM_0(FriendButton.user);
-                    ResetButtons();
+                    //GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
+                    _ = DownloadInfo.PageUserInfo ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
+                    Utilities.ShowPage(DownloadInfo.PageUserInfo);
+                    DownloadInfo.PageUserInfo.Method_Public_Void_APIUser_PDM_0(DownloadInfo.PageUserInfo.user);
+                    ClearDownload();
                 }),
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
                 new Action(delegate
                 {
                     Utilities.HideCurrentPopup();
-                    ResetButtons();
+                    ClearDownload();
                 })
             );
         }
 
-        public static void DownloadWorld(ApiWorld apiWorld, DownloadFromType downloadType)
+        public static void DownloadWorld(ApiWorld apiWorld)
         {
             
             if (!downloading)
             {
-                if (Main.overwriteAcceptButton) Utilities.QueueHudMessage("Starting Download");
-                downloadFromType = downloadType;
-                world = apiWorld;
-                currentDownloadingID = string.Copy(apiWorld.id);
+                if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Starting Download");
                 downloading = true;
-                Action<UnityEngine.Networking.UnityWebRequest> onProgressDel = OnDownloadProgress;
-                Action<AssetBundleDownload> onCompleteDel = OnComplete;
-                Action<string, string, LoadErrorReason> OnErrorDel = OnError;
-                Utilities.DownloadApiWorld( 
+                Logger.Log("Starting Download");
+                Utilities.DownloadApiWorld(
                     apiWorld,
-                    DelegateSupport.ConvertDelegate<OnDownloadProgress>(onProgressDel),
-                    DelegateSupport.ConvertDelegate<OnDownloadComplete>(onCompleteDel),
-                    DelegateSupport.ConvertDelegate<OnDownloadError>(OnErrorDel),
+                    DownloadProgress.GetOnProgressDel,
+                    DownloadComplete.GetOnCompleteDel,
+                    DownloadError.GetOnErrorDel,
                     true,
-                    UnpackType.EnumValue1);
-                if(downloadType == DownloadFromType.Invite) MelonCoroutines.Start(InviteButton.InviteButtonTimer(15));
+                    UnpackType.EnumValue1
+                );
             }
             else
             {
@@ -219,5 +130,16 @@ namespace WorldPredownload.DownloadManager
                 FriendButton.button.SetText(Constants.BUTTON_IDLE_TEXT);
             }
         }
+
+        public static void ProcessDownload(DownloadInfo downloadInfo)
+        {
+            DownloadInfo = downloadInfo;
+            DownloadWorld(downloadInfo.ApiWorld);
+            
+            if (downloadInfo.DownloadType == DownloadType.Invite && !downloading)
+                MelonCoroutines.Start(InviteButton.InviteButtonTimer(15));
+
+        }
+        
     }
 }
