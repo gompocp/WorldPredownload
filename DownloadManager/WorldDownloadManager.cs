@@ -5,14 +5,11 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using LoadErrorReason = EnumPublicSealedvaNoMiFiUnCoSeAsDuAsUnique;
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using WorldPredownload.UI;
-using UnhollowerRuntimeLib;
 using System;
 using VRC.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using MelonLoader;
-using VRC.UI;
-using WorldPredownload.Cache;
 
 namespace WorldPredownload.DownloadManager
 {

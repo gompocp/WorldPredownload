@@ -14,7 +14,7 @@ namespace WorldPredownload
         //public const string BUTTON_IDLE_OVERRIDE_TEXT = "Predownload";
         public const string BUTTON_BUSY_TEXT = "Cancel other download";
         public const string BUTTON_ALREADY_DOWNLOADED_TEXT = "Downloaded";
-        public const string BUTTON_ALREADY_DOWNLOADED_OVERRIDE_TEXT = "Downloaded";
+        //public const string BUTTON_ALREADY_DOWNLOADED_OVERRIDE_TEXT = "Downloaded";
         public const string DOWNLOAD_ERROR_TITLE = "World Predownload Failed";
         public const string DOWNLOAD_ERROR_MSG = "There was an error predownloading the world";
         public const string DOWNLOAD_ERROR_BTN_TEXT = "Dismiss";

@@ -1,5 +1,4 @@
-﻿using Transmtn.DTO;
-using Transmtn.DTO.Notifications;
+﻿using Transmtn.DTO.Notifications;
 using VRC.Core;
 using VRC.UI;
 

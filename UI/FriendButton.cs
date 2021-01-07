@@ -3,7 +3,6 @@ using System.Collections;
 using MelonLoader;
 using UnityEngine;
 using VRC.UI;
-using WorldPredownload;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 

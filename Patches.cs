@@ -1,26 +1,13 @@
-﻿using System;
-using Il2CppSystem.Collections;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.Raw;
+﻿using System.Linq;
 using Harmony;
-using Il2CppSystem.Collections.Generic;
-using Il2CppSystem.Diagnostics.Tracing;
 using MelonLoader;
-using UnhollowerBaseLib;
-using UnityEngine.UI;
 using VRC.Core;
-using VRC.SDKInternal;
 using VRC.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
-using Boolean = Il2CppSystem.Boolean;
-using Byte = Il2CppSystem.Byte;
 using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa9vUnique;
 using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
-using String = Il2CppSystem.String;
 
 namespace WorldPredownload
 {
@@ -39,15 +26,7 @@ namespace WorldPredownload
     [HarmonyPatch(typeof(PageWorldInfo), "Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0")]
     class SetupWorldInfoPatch
     {
-        static void Postfix(ApiWorld __0 = null)
-        {
-            if (__0 != null)
-            {
-                MelonLogger.Log("Not Null");
-                WorldButton.UpdateText(__0);
-            }
-            else MelonLogger.Log("Null");
-        }
+        static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
     }
     
     class SetupSocialMenuPatch

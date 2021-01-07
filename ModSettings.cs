@@ -1,7 +1,4 @@
 ﻿using MelonLoader;
-using UnityEngine;
-using WorldPredownload.UI;
-
 
 namespace WorldPredownload
 {

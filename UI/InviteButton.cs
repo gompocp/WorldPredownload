@@ -1,6 +1,5 @@
 ﻿using MelonLoader;
 using System;
-using Transmtn.DTO.Notifications;
 using UnityEngine;
 using VRC.Core;
 using WorldPredownload.Cache;

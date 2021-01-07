@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Transmtn.DTO.Notifications;
-using UnhollowerBaseLib;
 using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
@@ -15,9 +14,7 @@ using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
 using VRC.SDKBase;
-using VRC.UI;
 using WorldPredownload.DownloadManager;
-using WorldPredownload.UI;
 
 namespace WorldPredownload
 {

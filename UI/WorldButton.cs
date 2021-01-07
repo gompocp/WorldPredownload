@@ -30,7 +30,6 @@ namespace WorldPredownload.UI
 
         public static void UpdateText(ApiWorld world)
         {
-            Logger.Log("Updating Text");
             if (WorldDownloadManager.downloading)
             {
                 if (world.id.Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))
@@ -75,19 +74,6 @@ namespace WorldPredownload.UI
         
         public static Action onClick = delegate
         {
-
-            RoomManager.Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0(
-                GetWorldInfo().field_Private_ApiWorld_0,
-                new ApiWorldInstance(
-                    GetWorldInfo().field_Private_ApiWorld_0,
-                    GetWorldInfo().worldInstance.tagsOnly,
-                    1),
-                "blah",
-                1
-                );
-
-            Logger.Log("Received Click");
-            
             Utilities.DeselectClickedButton(button);
             try
             {
