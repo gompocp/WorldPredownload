@@ -22,26 +22,20 @@ namespace WorldPredownload
 
         public override void OnApplicationStart()
         {
-            
             Instance = this;
             ModSettings.RegisterSettings();
-            
+            ModSettings.Apply();
             ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
-            
             SetupSocialMenuPatch.Patch();
-
-
         }
 
         public override void VRChat_OnUiManagerInit()
         {
-            ModSettings.Apply();
             GameObject.Find("UserInterface/QuickMenu/NotificationInteractMenu").AddComponent<EnableDisableListener>().OnEnabled += delegate { InviteButton.UpdateText(); };
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
             WorldDownloadStatus.Setup();
-            
         }
 
         public override void OnModSettingsApplied() => ModSettings.Apply();

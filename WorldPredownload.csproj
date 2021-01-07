@@ -250,7 +250,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Cache\Cache.cs" />
+        <Compile Include="Cache\CacheManager.cs" />
         <Compile Include="Components\EnableDisableListener.cs" />
         <Compile Include="Constants.cs" />
         <Compile Include="DownloadManager\DownloadComplete.cs" />

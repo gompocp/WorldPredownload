@@ -47,7 +47,6 @@ namespace WorldPredownload
 
         public static void Postfix(APIUser __0) //, InfoType __1, ListType __2 = ListType.None
         {
-            if(__0.location != null) Logger.Log(__0.location);
             if (!__0.isFriend || 
                 Utilities.isInSameWorld(__0) || 
                 __0.location.ToLower().Equals("private") || 

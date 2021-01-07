@@ -114,7 +114,6 @@ namespace WorldPredownload.DownloadManager
             {
                 if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Starting Download");
                 downloading = true;
-                Logger.Log("Starting Download");
                 Utilities.DownloadApiWorld(
                     apiWorld,
                     DownloadProgress.GetOnProgressDel,
