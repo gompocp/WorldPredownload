@@ -12,6 +12,7 @@ namespace WorldPredownload.UI
     public class FriendButton 
     {
         public static bool canChangeText { get; set; } = true;
+        public static bool initialised { get; set; } = false;
         public static GameObject button { get; set; }
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Playlists";
@@ -23,11 +24,10 @@ namespace WorldPredownload.UI
         private const string PATH_TO_BACKGROUND = "UserInterface/MenuContent/Screens/UserInfo/User Panel/Panel";
         private const string PATH_TO_INFO_PANEL = "UserInterface/MenuContent/Screens/UserInfo/User Panel";
         private const string CLICK_ERROR_MESSAGE = "User may have clicked too quickly";
-        public static void Setup(bool show)
+        public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.FRIEND_BUTTON_POS);  //213f, 315f
-            button.SetActive(show);
             button.SetName(GAMEOBJECT_NAME);
             button.SetText(BUTTON_DEFAULT_TEXT);
             button.SetButtonActionInChildren(onClick);
@@ -39,6 +39,8 @@ namespace WorldPredownload.UI
 
             Transform userInfoPanel = GameObject.Find(PATH_TO_INFO_PANEL).transform;
             userInfoPanel.localPosition = new Vector3(userInfoPanel.localPosition.x, Constants.SOCIAL_PANEL_YPOS, userInfoPanel.localPosition.z);
+            button.SetActive(true);
+            initialised = true;
         }
         
         public static PageUserInfo GetUserInfo()
@@ -49,7 +51,7 @@ namespace WorldPredownload.UI
         public static IEnumerator UpdateText()
         {
             while (GetUserInfo().field_Private_Boolean_0 != true) yield return null;
-            if(!ModSettings.overrideSocialPageButton) button.SetActive(true);
+            button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {
                 if (GetUserInfo().user.id.Equals(WorldDownloadManager.DownloadInfo.PageUserInfo.user.id))
@@ -65,9 +67,15 @@ namespace WorldPredownload.UI
             else
             {
                 while (GetUserInfo().field_Private_ApiWorld_0 == null) yield return null;
-                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id, GetUserInfo().field_Private_ApiWorld_0.version))
+                if (CacheManager.HasDownloadedWorld(GetUserInfo().field_Private_ApiWorld_0.id,
+                    GetUserInfo().field_Private_ApiWorld_0.version))
+                {
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
-                else button.SetText(Constants.BUTTON_IDLE_TEXT);
+                }
+                else
+                {
+                    button.SetText(Constants.BUTTON_IDLE_TEXT);
+                }
                 
             }
         }
@@ -95,7 +103,7 @@ namespace WorldPredownload.UI
             Utilities.DeselectClickedButton(button);
             try
             {
-                if (WorldDownloadManager.downloading)
+                if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                 {
                     WorldDownloadManager.CancelDownload();
                     return;

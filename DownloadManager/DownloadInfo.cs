@@ -7,6 +7,7 @@ namespace WorldPredownload.DownloadManager
 {
     public class DownloadInfo
     {
+        public bool complete { get; set; } = false;
         public ApiWorld ApiWorld { get; set; }
         public string InstanceIDTags { get; set; } 
         public DownloadType DownloadType { get; set; }

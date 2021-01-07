@@ -14,20 +14,22 @@ namespace WorldPredownload.UI
         public static bool canChangeText { get; set; } = true;
         public static GameObject button { get; set; }
         private static bool canDownload = true;
+        public static bool initialised { get; set; } = false;
         
 
         private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/NotificationInteractMenu/BlockButton";
         private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/NotificationInteractMenu";
         private const string UNABLE_TO_CONVERT_WORLDID = "Error Creating ApiWorld From Notification";
 
-        public static void Setup(bool show)
+        public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.INVITE_BUTTON_POS);
             button.SetName(Constants.INVITE_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(onClick);
-            button.SetActive(show);
+            button.SetActive(true);
+            initialised = true;
         }
 
 

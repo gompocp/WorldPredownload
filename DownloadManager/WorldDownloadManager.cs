@@ -32,7 +32,7 @@ namespace WorldPredownload.DownloadManager
         
         public static void ClearDownload()
         {
-            DownloadInfo = null;
+            //DownloadInfo = null;
         }
 
         public static void DisplayWorldPopup()
@@ -89,11 +89,16 @@ namespace WorldPredownload.DownloadManager
                 Constants.DOWNLOAD_SUCCESS_LEFT_BTN_TEXT_F,
                 new Action(delegate
                 {
+                    Logger.Log("Debug Log: 1");
                     Utilities.HideCurrentPopup();
-                    //GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
+                    Logger.Log("Debug Log: 2");
+                    GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
                     _ = DownloadInfo.PageUserInfo ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
+                    Logger.Log("Debug Log: 3");
                     Utilities.ShowPage(DownloadInfo.PageUserInfo);
+                    Logger.Log("Debug Log: 4");
                     DownloadInfo.PageUserInfo.Method_Public_Void_APIUser_PDM_0(DownloadInfo.PageUserInfo.user);
+                    Logger.Log("Debug Log: 5");
                     ClearDownload();
                 }),
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
@@ -134,10 +139,11 @@ namespace WorldPredownload.DownloadManager
         public static void ProcessDownload(DownloadInfo downloadInfo)
         {
             DownloadInfo = downloadInfo;
-            DownloadWorld(downloadInfo.ApiWorld);
-            
             if (downloadInfo.DownloadType == DownloadType.Invite && !downloading)
                 MelonCoroutines.Start(InviteButton.InviteButtonTimer(15));
+            DownloadWorld(downloadInfo.ApiWorld);
+            
+           
 
         }
         

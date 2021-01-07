@@ -11,25 +11,27 @@ namespace WorldPredownload.UI
     public class WorldButton
     {
         public static bool canChangeText { get; set; } = true;
+        public static bool initialised { get; set; } = false;
         public static GameObject button { get; set; }
-        private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/WorldInfo/ReportButton";
-        private const string PATH_TO_CLONE_PARENT = "UserInterface/MenuContent/Screens/WorldInfo";
+        private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/MenuContent/Screens/WorldInfo/WorldButtons/GoButton";
+        private const string PATH_TO_CLONE_PARENT = "UserInterface/MenuContent/Screens/WorldInfo/WorldButtons";
         private const string PATH_TO_WORLDINFO = "UserInterface/MenuContent/Screens/WorldInfo";
 
-        public static void Setup(bool show)
+        public static void Setup()
         {
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.WORLD_BUTTON_POS);
-            button.SetActive(show);
             button.SetName(Constants.WORLD_BUTTON_NAME);
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(onClick);
+            button.SetActive(true);
+            initialised = true;
         }
 
         public static void UpdateText(ApiWorld world)
         {
-
-            if (WorldDownloadManager.downloading && WorldDownloadManager.DownloadInfo != null)
+            Logger.Log("Updating Text");
+            if (WorldDownloadManager.downloading)
             {
                 if (world.id.Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))
                     {
@@ -39,6 +41,7 @@ namespace WorldPredownload.UI
                     {
                         canChangeText = false;
                         button.SetText(Constants.BUTTON_BUSY_TEXT);
+
                     }
                 }
             else
@@ -47,6 +50,7 @@ namespace WorldPredownload.UI
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else
                     button.SetText(Constants.BUTTON_IDLE_TEXT);
+
             }
         }
 
@@ -54,7 +58,8 @@ namespace WorldPredownload.UI
         {
             try
             {
-                if (CacheManager.HasDownloadedWorld(WorldDownloadManager.DownloadInfo.ApiWorld.id, WorldDownloadManager.DownloadInfo.ApiWorld.version))
+                if (CacheManager.HasDownloadedWorld(WorldDownloadManager.DownloadInfo.ApiWorld.id,
+                    WorldDownloadManager.DownloadInfo.ApiWorld.version))
                     button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                 else
                     button.SetText(Constants.BUTTON_IDLE_TEXT);
@@ -70,12 +75,25 @@ namespace WorldPredownload.UI
         
         public static Action onClick = delegate
         {
+
+            RoomManager.Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0(
+                GetWorldInfo().field_Private_ApiWorld_0,
+                new ApiWorldInstance(
+                    GetWorldInfo().field_Private_ApiWorld_0,
+                    GetWorldInfo().worldInstance.tagsOnly,
+                    1),
+                "blah",
+                1
+                );
+
             Logger.Log("Received Click");
+            
             Utilities.DeselectClickedButton(button);
             try
             {
                 Utilities.DeselectClickedButton(button);
-                if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
+                if (WorldDownloadManager.downloading || 
+                    button.GetTextComponentInChildren().text.Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
                 {
                     WorldDownloadManager.CancelDownload();
                     return;
@@ -92,5 +110,6 @@ namespace WorldPredownload.UI
             }
             catch(Exception e) { MelonLogger.LogError($"Exception Occured In Setup For World Download: {e}"); }
         };
+        
     }
 }

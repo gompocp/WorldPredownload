@@ -7,7 +7,7 @@ namespace WorldPredownload
         public static void Log(string message)
         {
 #if DEBUG
-         MelonLogger.Log(message);   
+            MelonLogger.Log(message);   
 #endif            
         }
         

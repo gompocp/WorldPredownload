@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Transmtn.DTO.Notifications;
+using UnhollowerBaseLib;
 using UnhollowerRuntimeLib.XrefScans;
 using UnityEngine;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
@@ -13,6 +14,8 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
+using VRC.SDKBase;
+using VRC.UI;
 using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
 
@@ -20,8 +23,10 @@ namespace WorldPredownload
 {
     public static class Utilities
     {
-        private static List<string> downloadWorldKeyWords = new List<string>(new string[] { "vrcw", "Worlds", "Failed to parse world '", "' UnityVersion '" });
-
+        private static List<string> downloadWorldKeyWords =
+            new List<string>(new string[] {"vrcw", "Worlds", "Failed to parse world '", "' UnityVersion '"});
+        
+        private static MethodInfo worldInfoGoMethodInfo;
 
         private static DownloadWorldDelegate downloadWorldDelegate;
 
@@ -34,7 +39,8 @@ namespace WorldPredownload
         private static PushUIPageDelegate pushUIPageDelegate;
 
         private static AdvancedInvitesInviteDelegate advancedInvitesInviteDelegate;
-
+        
+        
         private static DownloadWorldDelegate GetDownloadWorldDelegate
         {
             get
@@ -227,21 +233,27 @@ namespace WorldPredownload
             }
         }
 
-        public static void GoToWorld(ApiWorld apiWorld, string tags)
+        public static void GoToWorld(ApiWorld apiWorld, string tags, bool isInvite)
         {
-            if (ModSettings.tryUseAdvancedInvitePopup && ModSettings.AdvancedInvites)
+            if (isInvite)
             {
-                try
+                if (ModSettings.tryUseAdvancedInvitePopup && ModSettings.AdvancedInvites)
                 {
-                    GetAdvancedInvitesInviteDelegate(WorldDownloadManager.DownloadInfo.Notification);
+                    try
+                    {
+                        GetAdvancedInvitesInviteDelegate(WorldDownloadManager.DownloadInfo.Notification);
+                    }
+                    catch (Exception e)
+                    {
+                        MelonLogger.LogError("Unable to execute Advanced Invite's Invite Handler Func" + e);
+                    }
                 }
-                catch(Exception e)
-                {
-                    MelonLogger.LogError("Unable to execute Advanced Invite's Invite Handler Func" + e);
-                }
+                else
+                    Networking.GoToRoom($"{apiWorld.id}:{tags}");
+                    //new PortalInternal().Method_Private_Void_String_String_PDM_0(apiWorld.id, tags);
             }
-            else
-                new PortalInternal().Method_Private_Void_String_String_PDM_0(apiWorld.id, tags);
+            else 
+                Networking.GoToRoom($"{apiWorld.id}:{tags}");
         }
 
         public static bool isInSameWorld(APIUser user)
@@ -252,13 +264,7 @@ namespace WorldPredownload
                 return false;
         }
 
-
-        public static void Swap<T>(ref T left, ref T right)
-        {
-            T temp = left;
-            left = right;
-            right = temp;
-        }
+        
 
         public static string ByteArrayToString(byte[] ba)
         {
@@ -312,7 +318,8 @@ namespace WorldPredownload
             return false;
 
         }
-
+        
+        
         public static void QueueHudMessage(string msg)
         {
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add(msg);
@@ -338,6 +345,7 @@ namespace WorldPredownload
             Il2CppSystem.Action middleButtonAction, 
             Il2CppSystem.Action<VRCUiPopup> additionalSetup = null
         );
+        
 
         private delegate void ClearErrorsDelegate();
 

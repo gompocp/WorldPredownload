@@ -13,7 +13,7 @@ namespace WorldPredownload.UI
         public static void Setup()
         {
             gameObject = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
-            gameObject.GetRectTrans().SetAnchoredPos(new Vector2(900f, -1473f));
+            gameObject.GetRectTrans().SetAnchoredPos(Constants.DWLD_STATUS_POS);
             gameObject.SetActive(true);
             gameObject.SetName(Constants.DOWNLOAD_STATUS_NAME);
             gameObject.GetComponent<VRC.UI.DebugDisplayText>().enabled = false;

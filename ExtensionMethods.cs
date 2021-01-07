@@ -14,9 +14,8 @@ namespace WorldPredownload
         public static void SetAction(this Button button, Action action)
         {
             button.onClick = new Button.ButtonClickedEvent();
-            button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(action));
+            button.onClick.AddListener(action);
         }
-
         public static void SetButtonAction(this GameObject gameObject, Action action) =>
             gameObject.GetComponent<Button>().SetAction(action);
 

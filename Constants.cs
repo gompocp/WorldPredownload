@@ -9,10 +9,12 @@ namespace WorldPredownload
         public const string WORLD_BUTTON_NAME = "PreloadWorldButton";
         public const string DOWNLOAD_STATUS_NAME = "DownloadStatusText";
         public const string DOWNLOAD_STATUS_IDLE_TEXT = "Not Downloading";
-        public const string BUTTON_INVITE_OVERWRITE_TEXT = "Accept";
+        //public const string BUTTON_INVITE_OVERWRITE_TEXT = "Accept";
         public const string BUTTON_IDLE_TEXT = "Predownload";
+        //public const string BUTTON_IDLE_OVERRIDE_TEXT = "Predownload";
         public const string BUTTON_BUSY_TEXT = "Cancel other download";
         public const string BUTTON_ALREADY_DOWNLOADED_TEXT = "Downloaded";
+        public const string BUTTON_ALREADY_DOWNLOADED_OVERRIDE_TEXT = "Downloaded";
         public const string DOWNLOAD_ERROR_TITLE = "World Predownload Failed";
         public const string DOWNLOAD_ERROR_MSG = "There was an error predownloading the world";
         public const string DOWNLOAD_ERROR_BTN_TEXT = "Dismiss";
@@ -23,8 +25,10 @@ namespace WorldPredownload
         public const string DOWNLOAD_SUCCESS_LEFT_BTN_TEXT_F = "Go to Friend Page";
 
         public static readonly Vector2 INVITE_BUTTON_POS = new Vector2(1470f, -630f);
-        public static readonly Vector2 WORLD_BUTTON_POS = new Vector2(200f, -188f);
+        public static readonly Vector2 WORLD_BUTTON_POS = new Vector2(250f, 8f);
+        //public static readonly Vector2 WORLD_BUTTON_OVERRIDE_POS = new Vector2(-293f, 8f);
         public static readonly Vector2 FRIEND_BUTTON_POS = new Vector2(215f, -230f);
+        public static readonly Vector2 DWLD_STATUS_POS = new Vector2(900f, -1473f);
         public const float FRIEND_PANEL_YPOS = -350f;
         public const float FRIEND_PANEL_YSCALE = 1.1f;
         public const float SOCIAL_PANEL_YPOS = 384f;

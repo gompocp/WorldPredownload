@@ -22,34 +22,36 @@ namespace WorldPredownload.DownloadManager
                         new Action<AssetBundleDownload>(
                             delegate(AssetBundleDownload download)
                             {
-                            
+                                WorldDownloadManager.DownloadInfo.complete = true;
                                 WorldDownloadManager.downloading = false;
-                                Logger.Log("Adding to cache list");
                                 CacheManager.AddDirectory(CacheManager.ComputeAssetHash(WorldDownloadManager.DownloadInfo.ApiWorld.id));
-                                Logger.Log("Updating Text");
                                 InviteButton.UpdateTextDownloadStopped();
                                 FriendButton.UpdateTextDownloadStopped();
                                 WorldButton.UpdateTextDownloadStopped();
                                 WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
                                 MelonLogger.Log("World Downloaded: " + download.field_Public_String_0);
+                                
                                 switch (WorldDownloadManager.DownloadInfo.DownloadType)
                                 {
                                     case DownloadType.Friend:
                                         if (!ModSettings.autoFollowFriends)
                                            WorldDownloadManager.DisplayFriendPopup();
                                         else
-                                            Utilities.GoToWorld(WorldDownloadManager.DownloadInfo.ApiWorld, WorldDownloadManager.DownloadInfo.InstanceIDTags);
+                                            Utilities.GoToWorld(WorldDownloadManager.DownloadInfo.ApiWorld, WorldDownloadManager.DownloadInfo.InstanceIDTags, false);
                                         WorldDownloadManager.ClearDownload();
                                         break;
                                     case DownloadType.Invite:
                                         if (!ModSettings.autoFollowInvites)
                                             WorldDownloadManager.DisplayInvitePopup();
                                         else
-                                            Utilities.GoToWorld(WorldDownloadManager.DownloadInfo.ApiWorld, WorldDownloadManager.DownloadInfo.InstanceIDTags);
+                                            Utilities.GoToWorld(WorldDownloadManager.DownloadInfo.ApiWorld, WorldDownloadManager.DownloadInfo.InstanceIDTags, true);
                                         WorldDownloadManager.ClearDownload();
                                         break;
                                     case DownloadType.World:
-                                        WorldDownloadManager.DisplayWorldPopup();
+                                        if (!ModSettings.autoFollowWorlds)
+                                            WorldDownloadManager.DisplayWorldPopup();
+                                        else 
+                                            Utilities.GoToWorld(WorldDownloadManager.DownloadInfo.ApiWorld, WorldDownloadManager.DownloadInfo.InstanceIDTags, false);
                                         break;
                                 }
                             

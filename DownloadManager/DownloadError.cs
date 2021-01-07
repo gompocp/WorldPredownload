@@ -15,13 +15,13 @@ namespace WorldPredownload.DownloadManager
         {
             get
             {
-                if (onErrorDel != null) return onErrorDel;
+                //if (onErrorDel != null) return onErrorDel;
                 onErrorDel = 
                     DelegateSupport.ConvertDelegate<OnDownloadError>(
                         new Action<string, string, LoadErrorReason>(
                             delegate(string url, string message, LoadErrorReason reason)
                             {
-                            
+                                WorldDownloadManager.DownloadInfo.complete = true;
                                 Utilities.ClearErrors();
                                 WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
                                 WorldDownloadManager.downloading = false;
@@ -30,7 +30,7 @@ namespace WorldPredownload.DownloadManager
                                 InviteButton.UpdateTextDownloadStopped();
                                 WorldDownloadManager.ClearDownload();
                                 if (message.Contains("Request aborted")) return;
-                                MelonLogger.LogWarning(url + " " + message + " " + reason);
+                                MelonLogger.LogError(url + " " + message + " " + reason);
                                 Utilities.ShowDismissPopup(
                                     Constants.DOWNLOAD_ERROR_TITLE,
                                     Constants.DOWNLOAD_ERROR_MSG, 

@@ -1,10 +1,14 @@
 ﻿using System;
+using Il2CppSystem.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.Raw;
 using Harmony;
-using Il2CppSystem.Xml.Schema;
+using Il2CppSystem.Collections.Generic;
+using Il2CppSystem.Diagnostics.Tracing;
 using MelonLoader;
+using UnhollowerBaseLib;
 using UnityEngine.UI;
 using VRC.Core;
 using VRC.SDKInternal;
@@ -12,8 +16,11 @@ using VRC.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
+using Boolean = Il2CppSystem.Boolean;
+using Byte = Il2CppSystem.Byte;
 using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa9vUnique;
 using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
+using String = Il2CppSystem.String;
 
 namespace WorldPredownload
 {
@@ -32,83 +39,17 @@ namespace WorldPredownload
     [HarmonyPatch(typeof(PageWorldInfo), "Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0")]
     class SetupWorldInfoPatch
     {
-        static void Postfix(ApiWorld __0) => WorldButton.UpdateText(__0);
-    }
-    
-    class SetupAcceptNotificationPatch
-    {
-        public static void Patch()
+        static void Postfix(ApiWorld __0 = null)
         {
-            MethodInfo acceptNotificationMethod = typeof(QuickMenu).GetMethods(BindingFlags.Public | BindingFlags.Instance).First(
-                   m => m.GetParameters().Length == 0 && m.XRefScanFor("AcceptNotification"));
-
-            WorldPredownload.HarmonyInstance.Patch(
-                acceptNotificationMethod,
-                new HarmonyMethod(typeof(SetupAcceptNotificationPatch).GetMethod(nameof(Prefix))));
-        }
-
-        public static bool Prefix()
-        {   
-            if(!Utilities.GetSelectedNotification().notificationType.Equals("invite", StringComparison.OrdinalIgnoreCase)) return true;
-            if (ModSettings.overrideInviteAcceptButton)
+            if (__0 != null)
             {
-                InviteButton.button.GetComponent<Button>().onClick.Invoke();
-                return false;
+                MelonLogger.Log("Not Null");
+                WorldButton.UpdateText(__0);
             }
-            return true;
-
+            else MelonLogger.Log("Null");
         }
     }
     
-    
-    class SetupAdvancedInvitesPatch
-    {
-        public static void Patch()
-        {
-            //                                                                                                                     GetType() was being stupid so yeah...          
-            var acceptNotificationMethod = MelonHandler.Mods.First(m => m.Info.Name.Equals("AdvancedInvites")).Assembly.GetTypes().Single(t => t.Name.Equals("AdvancedInviteSystem")).GetMethod("AcceptNotificationPatch", BindingFlags.NonPublic | BindingFlags.Static);
-            WorldPredownload.HarmonyInstance.Patch(acceptNotificationMethod, new HarmonyMethod(typeof(SetupAdvancedInvitesPatch).GetMethod(nameof(Prefix))));
-        }
-
-        public static bool Prefix()
-        {
-            
-            if (ModSettings.overrideInviteAcceptButton)
-            {
-                InviteButton.button.GetComponent<Button>().onClick.Invoke();
-                return false;
-            }
-            
-            return true;
-        }
-    }
-    
-
-    
-    class SetupUserInfoPatch
-    {
-        public static void Patch()
-        {
-            WorldPredownload.HarmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Where(m => m.ReturnType == typeof(void)
-                && m.GetParameters().Length == 2
-                && m.GetParameters()[0].ParameterType == typeof(string)
-                && m.GetParameters()[1].ParameterType == typeof(bool)).ToList()[1],
-                new HarmonyMethod(typeof(SetupUserInfoPatch).GetMethod(nameof(Postfix))
-            ));
-        }
-
-        public static void Postfix(ref string __0)
-        {
-            if (__0.Equals("Join")) ;
-            //MelonCoroutines.Start(FriendButton.UpdateText());
-            else
-                FriendButton.button.SetActive(false);
-        }
-    }
-    
-            
-
-
     class SetupSocialMenuPatch
     {
         public static void Patch()
@@ -127,23 +68,21 @@ namespace WorldPredownload
 
         public static void Postfix(APIUser __0) //, InfoType __1, ListType __2 = ListType.None
         {
-            if (!ModSettings.overrideSocialPageButton)
-            {
-                Logger.Log(__0.location);
-                if (!__0.isFriend || Utilities.isInSameWorld(__0) || __0.location.ToLower().Equals("private"))
-                    FriendButton.button.SetActive(false);
-                else
-                {
-                    FriendButton.button.SetActive(true);
-                    MelonCoroutines.Start(FriendButton.UpdateText());
-                }
-            }
-            else 
+            if(__0.location != null) Logger.Log(__0.location);
+            if (!__0.isFriend || 
+                Utilities.isInSameWorld(__0) || 
+                __0.location.ToLower().Equals("private") || 
+                __0.location.ToLower().Equals("offline")
+            )
                 FriendButton.button.SetActive(false);
+            else
+            {
+                FriendButton.button.SetActive(true);
+                MelonCoroutines.Start(FriendButton.UpdateText());
+            }
 
 
         }
     }
-    
-    
+
 }
