@@ -9,7 +9,14 @@
 -If you go to another world while downloading, it'll cancel the download <br>
 -Performance may degrade for split second on world enter due to you having a large cache size <br>
 
-# Changes <br>
+# v1.3.4 Changes <br>
+-Mod will no longer "eat" your join/friend requests<br>
+-Mod should hopefully update text more consistently<br>
+-Slightly better performance here and there<br>
+-Yeeted the override settings because it was hurting my head <br>
+<img src="https://cdn.discordapp.com/attachments/769569340856991754/796786175510708234/animethumbsdown7.jpg"/> <br>
+
+# v1.3.2.1 Changes <br>
 -Popup will no longer show when you have a worldInfo page or userinfo open in the menu as you can see download status there <br>
 -Mod will now check to see if the world has been downloaded previously except on invite notification menu <br><br>
 
