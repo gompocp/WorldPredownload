@@ -1,8 +1,8 @@
 # WorldPredownload ![Downloads](https://img.shields.io/github/downloads/gompocp/WorldPredownload/total?color=darkgreen) ![Current Version](https://img.shields.io/github/v/release/gompocp/WorldPredownload?color=blue)<br>
 
 -Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file<br>
--Credit to [Ben](https://github.com/BenjaminZehowlt/) for xref scanning mechanism from https://github.com/BenjaminZehowlt/DynamicBonesSafety <br>
--Credit to [Knah](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) for enable disable listener and the hud icon method <br>
+-Credit to [Ben](https://github.com/BenjaminZehowlt/DynamicBonesSafety) for xref scanning mechanism <br>
+-Credit to [Knah](https://github.com/knah/) for [enable disable listener](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) and the [hud icon method](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L120) that I changed to use here along with the [assetbundle loading mechanism](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L61)  <br>
 -You can hit preload on an invite, on a world page or on a friend <br>
 -You can see your download status bottom right of quick menu <br>
 -Currently you can only download/preload one world at a time <br>
