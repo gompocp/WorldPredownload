@@ -9,6 +9,10 @@
 -If you go to another world while downloading, it'll cancel the download <br>
 -Performance may degrade for split second on world enter due to you having a large cache size <br>
 
+
+# v1.3.5 Changes <br>
+-Mod now has a hud icon you can enable or disable using uix or edit the melon prefs file<br>
+
 # v1.3.4 Changes <br>
 -Mod will no longer "eat" your join/friend requests<br>
 -Mod should hopefully update text more consistently<br>
