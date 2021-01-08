@@ -91,12 +91,13 @@ namespace WorldPredownload.DownloadManager
                     Utilities.HideCurrentPopup();
                     Logger.Log("Debug Log: 2");
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
-                    _ = DownloadInfo.PageUserInfo ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
+                    _ = DownloadInfo.APIUser ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
                     Logger.Log("Debug Log: 3");
                     Utilities.ShowPage(DownloadInfo.PageUserInfo);
                     Logger.Log("Debug Log: 4");
-                    DownloadInfo.PageUserInfo.Method_Public_Void_APIUser_PDM_0(DownloadInfo.PageUserInfo.user);
+                    DownloadInfo.PageUserInfo.Method_Public_Void_APIUser_PDM_0(DownloadInfo.APIUser);
                     Logger.Log("Debug Log: 5");
+                    //FriendButton.UpdateTextDownloadStopped();
                     ClearDownload();
                 }),
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,

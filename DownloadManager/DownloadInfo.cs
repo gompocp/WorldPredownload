@@ -11,6 +11,8 @@ namespace WorldPredownload.DownloadManager
         public string InstanceIDTags { get; set; } 
         public DownloadType DownloadType { get; set; }
         public PageUserInfo? PageUserInfo { get; set; }
+        
+        public APIUser? APIUser { get; set; }
         public PageWorldInfo? PageWorldInfo { get; set; }
         public Notification? Notification { get; set; }
         
@@ -27,6 +29,7 @@ namespace WorldPredownload.DownloadManager
             this.InstanceIDTags = InstanceIDTags;
             this.DownloadType = DownloadType;
             this.PageUserInfo = PageUserInfo;
+            if(PageUserInfo != null ) this.APIUser = PageUserInfo.user;
             this.PageWorldInfo = PageWorldInfo;
             this.Notification = Notification;
         }

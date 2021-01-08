@@ -14,11 +14,27 @@ namespace WorldPredownload.UI
         {
             gameObject = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             gameObject.GetRectTrans().SetAnchoredPos(Constants.DWLD_STATUS_POS);
-            gameObject.SetActive(true);
+            if (ModSettings.showStatusOnQM) gameObject.SetActive(true);
+            else gameObject.SetActive(false);
             gameObject.SetName(Constants.DOWNLOAD_STATUS_NAME);
             gameObject.GetComponent<VRC.UI.DebugDisplayText>().enabled = false;
             gameObject.GetComponent<Text>().alignment = TextAnchor.UpperRight;
             gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
+        }
+
+        public static void Enable()
+        {
+            if (gameObject != null)
+            {
+                gameObject.SetActive(true);
+                gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
+            }
+        }
+
+        public static void Disable()
+        {
+            if (gameObject != null) 
+                gameObject.SetActive(false);
         }
     }
 }

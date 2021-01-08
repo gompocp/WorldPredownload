@@ -29,7 +29,7 @@ namespace WorldPredownload.DownloadManager
                                 if (request.downloadProgress >= 0 && 0.9 >= request.downloadProgress)
                                 {
                                     string progress = $"Progress:{((request.downloadProgress / 0.9) * 100).ToString("0")} %";
-                                    WorldDownloadStatus.gameObject.SetText(progress);
+                                    if(ModSettings.showStatusOnQM) WorldDownloadStatus.gameObject.SetText(progress);
                                     if (InviteButton.canChangeText) InviteButton.button.SetText(progress);
                                     if (FriendButton.canChangeText) FriendButton.button.SetText(progress);
                                     if (WorldButton.canChangeText) WorldButton.button.SetText(progress);

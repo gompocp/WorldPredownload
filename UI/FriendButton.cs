@@ -53,7 +53,7 @@ namespace WorldPredownload.UI
             button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {
-                if (GetUserInfo().user.id.Equals(WorldDownloadManager.DownloadInfo.PageUserInfo.user.id))
+                if (GetUserInfo().user.id.Equals(WorldDownloadManager.DownloadInfo.APIUser.id))
                 {
                     canChangeText = true;
                 }
