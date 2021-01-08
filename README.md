@@ -1,4 +1,4 @@
-# WorldPredownload <br>
+# WorldPredownload ![Downloads](https://img.shields.io/github/downloads/gompocp/WorldPredownload/total?color=darkgreen) ![Current Version](https://img.shields.io/github/v/release/gompocp/WorldPredownload?color=blue)<br>
 
 -Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file<br>
 -Credit to [Ben](https://github.com/BenjaminZehowlt/) for xref scanning mechanism from https://github.com/BenjaminZehowlt/DynamicBonesSafety <br>
