@@ -14,7 +14,7 @@ namespace WorldPredownload.DownloadManager
         {
             get
             {
-                //if (onErrorDel != null) return onErrorDel;
+                if (onErrorDel != null) return onErrorDel;
                 onErrorDel = 
                     DelegateSupport.ConvertDelegate<OnDownloadError>(
                         new Action<string, string, LoadErrorReason>(
@@ -22,6 +22,7 @@ namespace WorldPredownload.DownloadManager
                             {
                                 WorldDownloadManager.DownloadInfo.complete = true;
                                 Utilities.ClearErrors();
+                                HudIcon.Disable();
                                 WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
                                 WorldDownloadManager.downloading = false;
                                 FriendButton.UpdateTextDownloadStopped();

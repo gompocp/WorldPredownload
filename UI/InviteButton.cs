@@ -34,24 +34,14 @@ namespace WorldPredownload.UI
 
         public static void UpdateTextDownloadStopped()
         {
-            //Lazy way to check if the invite menu is up
-            try
-            {
-                if (CacheManager.HasDownloadedWorld(Utilities.GetSelectedNotification().GetWorldID()))
-                    button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
-                else
-                    button.SetText(Constants.BUTTON_IDLE_TEXT);
-            }
-            catch
-            {
-                // if it isn't up who the fuck cares what it says
-            }
+            button.SetText(Constants.BUTTON_IDLE_TEXT);
             canChangeText = true;
         }
 
         public static void UpdateText()
         {
             if(Utilities.GetSelectedNotification().notificationType.Equals("invite")) {
+                button.SetActive(true);
                 if (WorldDownloadManager.downloading)
                 {
                     if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))

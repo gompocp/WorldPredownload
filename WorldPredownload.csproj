@@ -32,6 +32,7 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>0</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Assembly-CSharp, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
@@ -266,10 +267,14 @@
         <Compile Include="Patches.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="UI\FriendButton.cs" />
+        <Compile Include="UI\HudIcon.cs" />
         <Compile Include="UI\InviteButton.cs" />
         <Compile Include="UI\WorldButton.cs" />
         <Compile Include="UI\WorldDownloadStatus.cs" />
         <Compile Include="Utilities.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="gompowpd" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,7 +13,7 @@ namespace WorldPredownload.DownloadManager
         {
             get
             {
-                //if (onProgressDel != null) return onProgressDel;
+                if (onProgressDel != null) return onProgressDel;
                 onProgressDel = 
                     DelegateSupport.ConvertDelegate<OnDownloadProgress>(
                         new Action<UnityWebRequest>(
@@ -33,6 +33,7 @@ namespace WorldPredownload.DownloadManager
                                     if (InviteButton.canChangeText) InviteButton.button.SetText(progress);
                                     if (FriendButton.canChangeText) FriendButton.button.SetText(progress);
                                     if (WorldButton.canChangeText) WorldButton.button.SetText(progress);
+                                    if (ModSettings.showStatusOnHud) HudIcon.Update((float)(request.downloadProgress/0.9));
                                 }
                             
                             }));

@@ -1,7 +1,9 @@
 ﻿using MelonLoader;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using Transmtn.DTO.Notifications;
@@ -13,6 +15,7 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using VRC.SDKBase;
 using WorldPredownload.DownloadManager;
 
@@ -261,7 +264,22 @@ namespace WorldPredownload
                 return false;
         }
 
-        
+        public static Image CreateNotifierImage(string name, float offset, Color colorTint, Sprite icon)
+        {
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud");
+            var requestedParent = hudRoot.transform.Find("NotificationDotParent");
+            var indicator = UnityEngine.Object.Instantiate(hudRoot.transform.Find("NotificationDotParent/NotificationDot").gameObject, requestedParent, false).Cast<GameObject>();
+            indicator.name = "NotifyDot-" + name;
+            indicator.SetActive(true);
+            indicator.transform.localPosition += Vector3.right * offset;
+            var image = indicator.GetComponent<Image>();
+            image.sprite = icon;
+
+            image.enabled = false;
+            image.color = colorTint;
+
+            return image;
+        }
 
         public static string ByteArrayToString(byte[] ba)
         {

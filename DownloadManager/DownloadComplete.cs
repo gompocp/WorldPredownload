@@ -24,6 +24,7 @@ namespace WorldPredownload.DownloadManager
                                 WorldDownloadManager.DownloadInfo.complete = true;
                                 WorldDownloadManager.downloading = false;
                                 CacheManager.AddDirectory(CacheManager.ComputeAssetHash(WorldDownloadManager.DownloadInfo.ApiWorld.id));
+                                HudIcon.Disable();
                                 InviteButton.UpdateTextDownloadStopped();
                                 FriendButton.UpdateTextDownloadStopped();
                                 WorldButton.UpdateTextDownloadStopped();

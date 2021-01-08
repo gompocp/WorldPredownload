@@ -6,6 +6,7 @@ using LoadErrorReason = EnumPublicSealedvaNoMiFiUnCoSeAsDuAsUnique;
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using WorldPredownload.UI;
 using System;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.Raw;
 using VRC.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +30,7 @@ namespace WorldPredownload.DownloadManager
         
         public static void ClearDownload()
         {
-            //DownloadInfo = null;
+            //DownloadInfo = null; Ignore this lel
         }
 
         public static void DisplayWorldPopup()
@@ -112,6 +113,7 @@ namespace WorldPredownload.DownloadManager
             
             if (!downloading)
             {
+                if(ModSettings.showStatusOnHud) HudIcon.Enable();
                 if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Starting Download");
                 downloading = true;
                 Utilities.DownloadApiWorld(
