@@ -11,7 +11,7 @@ namespace WorldPredownload
     {
         public const string Name = "WorldPredownload";
         public const string Author = "gompo";
-        public const string Version = "1.3.5.1";
+        public const string Version = "1.3.5.2";
         public const string DownloadLink = "https://github.com/gompocp/WorldPredownload/releases";
     }
 
