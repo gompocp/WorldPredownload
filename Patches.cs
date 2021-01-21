@@ -39,6 +39,7 @@ namespace WorldPredownload
                          && m.GetParameters()[0].ParameterType == typeof(APIUser)
                          && m.GetParameters()[1].ParameterType == typeof(InfoType)
                          && m.GetParameters()[2].ParameterType == typeof(ListType)
+                         && !m.Name.Contains("PDM")
                 ),
                 null,
                 new HarmonyMethod(typeof(SetupSocialMenuPatch).GetMethod(nameof(Postfix)))
