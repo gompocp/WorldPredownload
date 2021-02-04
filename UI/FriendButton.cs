@@ -53,7 +53,7 @@ namespace WorldPredownload.UI
             button.SetActive(true);
             if (WorldDownloadManager.downloading)
             {
-                if (GetUserInfo().user.id.Equals(WorldDownloadManager.DownloadInfo.APIUser.id))
+                if (GetUserInfo().field_Public_APIUser_0.id.Equals(WorldDownloadManager.DownloadInfo.APIUser.id))
                 {
                     canChangeText = true;
                 }
@@ -110,7 +110,7 @@ namespace WorldPredownload.UI
 
                 WorldDownloadManager.ProcessDownload(
                     DownloadInfo.CreateUserPageDownloadInfo(GetUserInfo().field_Private_ApiWorld_0,
-                        GetUserInfo().user.location.Split(':')[1],
+                        GetUserInfo().field_Public_APIUser_0.location.Split(':')[1],
                         DownloadType.Friend,
                         GetUserInfo()
                     ));

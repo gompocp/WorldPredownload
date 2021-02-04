@@ -24,11 +24,11 @@ namespace WorldPredownload
         public const string DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT = "Dismiss";
         public const string DOWNLOAD_SUCCESS_LEFT_BTN_TEXT_F = "Go to Friend Page";
 
-        public static readonly Vector2 INVITE_BUTTON_POS = new Vector2(1470f, -630f);
+        public static readonly Vector2 INVITE_BUTTON_POS = new Vector2(630f, -208f);
         public static readonly Vector2 WORLD_BUTTON_POS = new Vector2(250f, 8f);
         //public static readonly Vector2 WORLD_BUTTON_OVERRIDE_POS = new Vector2(-293f, 8f);
         public static readonly Vector2 FRIEND_BUTTON_POS = new Vector2(215f, -230f);
-        public static readonly Vector2 DWLD_STATUS_POS = new Vector2(900f, -1473f);
+        public static readonly Vector2 DWLD_STATUS_POS = new Vector2(900f, -225f);
         public const float FRIEND_PANEL_YPOS = -350f;
         public const float FRIEND_PANEL_YSCALE = 1.1f;
         public const float SOCIAL_PANEL_YPOS = 384f;

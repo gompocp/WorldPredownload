@@ -88,7 +88,7 @@ namespace WorldPredownload.UI
                 WorldDownloadManager.ProcessDownload(
                     DownloadInfo.CreateWorldPageDownloadInfo(
                         GetWorldInfo().field_Private_ApiWorld_0,
-                        GetWorldInfo().worldInstance.tagsOnly,
+                        GetWorldInfo().field_Public_ApiWorldInstance_0.tagsOnly,
                         DownloadType.World,
                         GetWorldInfo()
                     )

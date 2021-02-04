@@ -7,8 +7,8 @@ namespace WorldPredownload.UI
     {
         public static GameObject gameObject { get; set; }
 
-        private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/ShortcutMenu/PingText";
-        private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/ShortcutMenu";
+        private const string PATH_TO_GAMEOBJECT_TO_CLONE = "UserInterface/QuickMenu/QuickMenu_NewElements/_InfoBar/PingText";
+        private const string PATH_TO_CLONE_PARENT = "UserInterface/QuickMenu/QuickMenu_NewElements/_InfoBar";
 
         public static void Setup()
         {

@@ -3,7 +3,7 @@ using MelonLoader;
 using UnhollowerRuntimeLib;
 using WorldPredownload.Cache;
 using WorldPredownload.UI;
-using AssetBundleDownload = CustomYieldInstructionPublicObAsByStInStCoBoObInUnique;
+//using AssetBundleDownload = CustomYieldInstructionPublicObAsByStInStCoBoObInUnique;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
 
 namespace WorldPredownload.DownloadManager
@@ -21,7 +21,7 @@ namespace WorldPredownload.DownloadManager
                         new Action<AssetBundleDownload>(
                             delegate(AssetBundleDownload download)
                             {
-                                
+                                if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Download Finished");
                                 WorldDownloadManager.DownloadInfo.complete = true;
                                 WorldDownloadManager.downloading = false;
                                 CacheManager.AddDirectory(CacheManager.ComputeAssetHash(WorldDownloadManager.DownloadInfo.ApiWorld.id));

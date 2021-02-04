@@ -217,6 +217,7 @@ namespace WorldPredownload
 
         public static Notification GetSelectedNotification()
         {
+            //return NotificationManager.prop_NotificationManager_0.field_Private_Notification_0;
             return QuickMenu.prop_QuickMenu_0.field_Private_Notification_0;
         }
 
@@ -321,6 +322,7 @@ namespace WorldPredownload
         public static void QueueHudMessage(string msg)
         {
             VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add(msg);
+            VRCUiManager.prop_VRCUiManager_0.field_Private_List_1_String_0.Add("");
         }
 
 

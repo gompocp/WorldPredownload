@@ -1,8 +1,8 @@
-﻿using AssetBundleDownload = CustomYieldInstructionPublicObAsByStInStCoBoObInUnique;
+﻿//using AssetBundleDownload = CustomYieldInstructionPublicObAsByStInStCoBoObInUnique;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
 using OnDownloadProgress = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoUnUnique;
 using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoStObStUnique;
-using LoadErrorReason = EnumPublicSealedvaNoMiFiUnCoSeAsDuAsUnique;
+//using LoadErrorReason = EnumPublicSealedvaNoMiFiUnCoSeAsDuAsUnique;
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using WorldPredownload.UI;
 using System;
@@ -49,7 +49,7 @@ namespace WorldPredownload.DownloadManager
                     Utilities.HideCurrentPopup();
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/WorldsButton").GetComponent<Button>().onClick.Invoke();
                     Utilities.ShowPage(DownloadInfo.PageWorldInfo);
-                    DownloadInfo.PageWorldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(DownloadInfo.ApiWorld, DownloadInfo.PageWorldInfo.worldInstance);
+                    DownloadInfo.PageWorldInfo.Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0(DownloadInfo.ApiWorld, DownloadInfo.PageWorldInfo.field_Public_ApiWorldInstance_0);
                     ClearDownload();
                 }),
                 Constants.DOWNLOAD_SUCCESS_RIGHT_BTN_TEXT,
@@ -87,16 +87,11 @@ namespace WorldPredownload.DownloadManager
                 Constants.DOWNLOAD_SUCCESS_LEFT_BTN_TEXT_F,
                 new Action(delegate
                 {
-                    Logger.Log("Debug Log: 1");
                     Utilities.HideCurrentPopup();
-                    Logger.Log("Debug Log: 2");
                     GameObject.Find("UserInterface/QuickMenu/ShortcutMenu/SocialButton").GetComponent<Button>().onClick.Invoke();
                     _ = DownloadInfo.APIUser ?? throw new NullReferenceException(message: "Friend User Info Null Uh Oh");
-                    Logger.Log("Debug Log: 3");
                     Utilities.ShowPage(DownloadInfo.PageUserInfo);
-                    Logger.Log("Debug Log: 4");
                     DownloadInfo.PageUserInfo.Method_Public_Void_APIUser_PDM_0(DownloadInfo.APIUser);
-                    Logger.Log("Debug Log: 5");
                     //FriendButton.UpdateTextDownloadStopped();
                     ClearDownload();
                 }),

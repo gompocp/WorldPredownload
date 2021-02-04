@@ -29,6 +29,7 @@ namespace WorldPredownload
         static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
     }
     
+    
     class SetupSocialMenuPatch
     {
         public static void Patch()
@@ -46,8 +47,14 @@ namespace WorldPredownload
             );
         }
 
-        public static void Postfix(APIUser __0) //, InfoType __1, ListType __2 = ListType.None
+        public static void Postfix(APIUser __0 = null) //, InfoType __1, ListType __2 = ListType.None
         {
+            if (__0 == null) return;
+            if (__0.location == null)
+            {
+                FriendButton.button.SetActive(false);
+                return;
+            }
             if (!__0.isFriend || 
                 Utilities.isInSameWorld(__0) || 
                 __0.location.ToLower().Equals("private") || 

@@ -1,7 +1,12 @@
-﻿using Harmony;
+﻿using System;
+using System.Reflection;
+using Harmony;
 using MelonLoader;
+using Transmtn.DTO.Notifications;
+using UnhollowerBaseLib.Attributes;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using VRC.UI;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
 
@@ -11,10 +16,11 @@ namespace WorldPredownload
     {
         public const string Name = "WorldPredownload";
         public const string Author = "gompo";
-        public const string Version = "1.3.5.3";
+        public const string Version = "1.3.5.6";
         public const string DownloadLink = "https://github.com/gompocp/WorldPredownload/releases";
     }
 
+    
     public class WorldPredownload : MelonMod
     {
         private static MelonMod Instance;
@@ -22,6 +28,7 @@ namespace WorldPredownload
 
         public override void OnApplicationStart()
         {
+            MelonLogger.Msg("Start");
             Instance = this;
             ModSettings.RegisterSettings();
             ModSettings.Apply();
@@ -31,7 +38,7 @@ namespace WorldPredownload
 
         public override void VRChat_OnUiManagerInit()
         {
-            GameObject.Find("UserInterface/QuickMenu/NotificationInteractMenu").AddComponent<EnableDisableListener>().OnEnabled += delegate { InviteButton.UpdateText(); };
+            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeInviteResponseMoreOptionsMenu").AddComponent<EnableDisableListener>().OnEnabled += delegate { InviteButton.UpdateText(); };
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
