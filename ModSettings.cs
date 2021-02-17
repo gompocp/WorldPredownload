@@ -16,6 +16,7 @@ namespace WorldPredownload
         public static bool tryUseAdvancedInvitePopup { get; set; } = true;
         public static bool AdvancedInvites { get; set; } = false;
         
+        
         public static void RegisterSettings()
         {
             if (Utilities.HasMod("AdvancedInvites")) 

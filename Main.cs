@@ -25,12 +25,14 @@ namespace WorldPredownload
             Instance = this;
             ModSettings.RegisterSettings();
             ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
+            ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
             SetupSocialMenuPatch.Patch();
         }
         
         public override void VRChat_OnUiManagerInit()
         {
             GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeNotificationsMenu/ScrollRect/ViewPort/Content/NotificationUiPrefab/Row_NotificationActions").AddComponent<SelectedNotificationListener>();
+            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeInviteResponseMoreOptionsMenu").AddComponent<NotificationMoreListener>();
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
@@ -39,7 +41,7 @@ namespace WorldPredownload
         }
         
         public override void OnPreferencesLoaded() => ModSettings.Apply();
-
+        
         public override void OnPreferencesSaved() => ModSettings.Apply();
     }
 }
