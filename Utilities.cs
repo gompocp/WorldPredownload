@@ -1,9 +1,6 @@
 ﻿using MelonLoader;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using Transmtn.DTO.Notifications;
@@ -15,9 +12,12 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using VRC.SDKBase;
+using WorldPredownload.Components;
 using WorldPredownload.DownloadManager;
+using Delegate = System.Delegate;
+using Exception = System.Exception;
+using StringComparison = System.StringComparison;
 
 namespace WorldPredownload
 {
@@ -217,10 +217,16 @@ namespace WorldPredownload
 
         public static Notification GetSelectedNotification()
         {
-            //return NotificationManager.prop_NotificationManager_0.field_Private_Notification_0;
-            return QuickMenu.prop_QuickMenu_0.field_Private_Notification_0;
+            string toFindID = SelectedNotificationListener.selectedContentButton.field_Public_String_0;
+            foreach (var notif in MonoBehaviour1PublicGaBoLi1NoObSoSoUnique.field_Private_Static_List_1_Notification_0)
+            {
+                if (notif.id.Equals(toFindID)) return notif;
+            }
+            return null; //   (。_。)
         }
 
+        
+        
         public static GameObject CloneGameObject(string pathToGameObject, string pathToParent)
         {
             return GameObject.Instantiate(GameObject.Find(pathToGameObject).transform, GameObject.Find(pathToParent).transform).gameObject;

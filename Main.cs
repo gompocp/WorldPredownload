@@ -1,12 +1,7 @@
-﻿using System;
-using System.Reflection;
-using Harmony;
+﻿using Harmony;
 using MelonLoader;
-using Transmtn.DTO.Notifications;
-using UnhollowerBaseLib.Attributes;
 using UnhollowerRuntimeLib;
 using UnityEngine;
-using VRC.UI;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
 
@@ -16,11 +11,10 @@ namespace WorldPredownload
     {
         public const string Name = "WorldPredownload";
         public const string Author = "gompo";
-        public const string Version = "1.3.5.6";
+        public const string Version = "1.3.6";
         public const string DownloadLink = "https://github.com/gompocp/WorldPredownload/releases";
     }
 
-    
     public class WorldPredownload : MelonMod
     {
         private static MelonMod Instance;
@@ -28,17 +22,16 @@ namespace WorldPredownload
 
         public override void OnApplicationStart()
         {
-            MelonLogger.Msg("Start");
             Instance = this;
             ModSettings.RegisterSettings();
             ModSettings.Apply();
-            ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>();
+            ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
             SetupSocialMenuPatch.Patch();
         }
-
+        
         public override void VRChat_OnUiManagerInit()
         {
-            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeInviteResponseMoreOptionsMenu").AddComponent<EnableDisableListener>().OnEnabled += delegate { InviteButton.UpdateText(); };
+            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeNotificationsMenu/ScrollRect/ViewPort/Content/NotificationUiPrefab/Row_NotificationActions").AddComponent<SelectedNotificationListener>();
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
@@ -47,6 +40,13 @@ namespace WorldPredownload
         }
 
         public override void OnModSettingsApplied() => ModSettings.Apply();
-        
+        public override void OnUpdate()
+        {
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+               MelonLogger.Msg(SelectedNotificationListener.selectedContentButton.field_Public_String_0);
+            }
+        }
+
     }
 }

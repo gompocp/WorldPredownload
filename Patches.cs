@@ -29,7 +29,6 @@ namespace WorldPredownload
         static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
     }
     
-    
     class SetupSocialMenuPatch
     {
         public static void Patch()

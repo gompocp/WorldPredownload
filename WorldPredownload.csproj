@@ -36,7 +36,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Cache\CacheManager.cs" />
-        <Compile Include="Components\EnableDisableListener.cs" />
+        <Compile Include="Components\SelectedNotificationListener.cs" />
         <Compile Include="Constants.cs" />
         <Compile Include="DownloadManager\DownloadComplete.cs" />
         <Compile Include="DownloadManager\DownloadError.cs" />

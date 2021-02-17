@@ -22,7 +22,6 @@ namespace WorldPredownload.UI
 
         public static void Setup()
         {
-            return;
             button = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             button.GetRectTrans().SetAnchoredPos(Constants.INVITE_BUTTON_POS);
             button.SetName(Constants.INVITE_BUTTON_NAME);
@@ -35,20 +34,14 @@ namespace WorldPredownload.UI
 
         public static void UpdateTextDownloadStopped()
         {
-            return;
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             canChangeText = true;
         }
 
         public static void UpdateText()
         {
-            return;
-            MelonLogger.Msg("Got here");
-            
             if(Utilities.GetSelectedNotification().notificationType.Equals("invite")) {
-                MelonLogger.Msg("Got here 2");
                 button.SetActive(true);
-                MelonLogger.Msg("Got here 3");
                 if (WorldDownloadManager.downloading)
                 {
                     if (Utilities.GetSelectedNotification().GetWorldID().Equals(WorldDownloadManager.DownloadInfo.ApiWorld.id))
@@ -61,7 +54,6 @@ namespace WorldPredownload.UI
                 }
                 else
                 {
-                    MelonLogger.Msg("Got here 4");
                     if (CacheManager.HasDownloadedWorld(Utilities.GetSelectedNotification().GetWorldID())) button.SetText(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT);
                     else button.SetText(Constants.BUTTON_IDLE_TEXT);
                 }
@@ -85,7 +77,6 @@ namespace WorldPredownload.UI
 
         public static Action onClick = delegate
         {
-            return;
             Utilities.DeselectClickedButton(button);
             if (WorldDownloadManager.downloading || button.GetTextComponentInChildren().text
                 .Equals(Constants.BUTTON_ALREADY_DOWNLOADED_TEXT))
