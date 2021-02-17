@@ -2,7 +2,7 @@
 
 -Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file<br>
 -Credit to [Ben](https://github.com/BenjaminZehowlt/DynamicBonesSafety) for xref scanning mechanism and hud icon idea<br>
--Credit to [Knah](https://github.com/knah/) for [enable disable listener](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) and the [hud icon method](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L120) that I changed to use here along with the [assetbundle loading mechanism](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L61)  <br>
+-Credit to [Knah](https://github.com/knah/) for [Enable Listener](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) and the [hud icon method](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L120) that I changed to use here along with the [assetbundle loading mechanism](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L61)  <br>
 -fwenny for helping with some testing <br>
 -You can hit preload on an invite, on a world page or on a friend <br>
 -You can see your download status bottom right of quick menu <br>
@@ -10,6 +10,8 @@
 -If you go to another world while downloading, it'll cancel the download <br>
 -Performance may degrade for split second on world enter due to you having a large cache size <br>
 
+# v1.3.6 Changes <br>
+-Added back invite predownloading 👌
 
 # v1.3.5 Changes <br>
 -Mod now has a hud icon you can enable or disable using uix or edit the melon prefs file<br>
