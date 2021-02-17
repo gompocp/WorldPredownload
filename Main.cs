@@ -24,7 +24,6 @@ namespace WorldPredownload
         {
             Instance = this;
             ModSettings.RegisterSettings();
-            //ModSettings.Apply();
             ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
             SetupSocialMenuPatch.Patch();
         }
@@ -38,17 +37,9 @@ namespace WorldPredownload
             WorldDownloadStatus.Setup();
             HudIcon.Setup();
         }
+        
+        public override void OnPreferencesLoaded() => ModSettings.Apply();
 
-        //public override void OnModSettingsApplied() => ModSettings.Apply();
-
-        public override void OnPreferencesLoaded()
-        {
-            ModSettings.Apply();
-        }
-
-        public override void OnPreferencesSaved()
-        {
-            ModSettings.Apply();
-        }
+        public override void OnPreferencesSaved() => ModSettings.Apply();
     }
 }
