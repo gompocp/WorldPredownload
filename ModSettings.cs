@@ -20,31 +20,29 @@ namespace WorldPredownload
         {
             if (Utilities.HasMod("AdvancedInvites")) 
                AdvancedInvites = true;
-            
-            MelonPrefs.RegisterCategory(categoryName, categoryName);
-            MelonPrefs.RegisterBool(categoryName, "AutoFollowInvites", autoFollowInvites, "Auto Follow Invite Predownloads");
-            MelonPrefs.RegisterBool(categoryName, "AutoFollowWorlds", autoFollowInvites, "Auto Join World Predownloads");
-            MelonPrefs.RegisterBool(categoryName, "AutoFollowFriends", autoFollowFriends, "Auto Join Friend Predownloads");
-            MelonPrefs.RegisterBool(categoryName, "ShowStatusOnQM", showStatusOnQM, "Display download status on QM");
-            MelonPrefs.RegisterBool(categoryName, "ShowStatusOnHud", showStatusOnHud, "Display download status on HUD");
-            MelonPrefs.RegisterBool(categoryName, "ShowHudMessages", showHudMessages, "Show Hud Messages");
-            MelonPrefs.RegisterBool(categoryName, "ShowPopupsOnComplete", showPopupsOnComplete, "Show Popup On Complete");
-            
+            MelonPreferences.CreateCategory(categoryName, categoryName);
+            MelonPreferences.CreateEntry(categoryName, "AutoFollowInvites", autoFollowInvites, "Auto Follow Invite Predownloads");
+            MelonPreferences.CreateEntry(categoryName, "AutoFollowWorlds", autoFollowInvites, "Auto Join World Predownloads");
+            MelonPreferences.CreateEntry(categoryName, "AutoFollowFriends", autoFollowFriends, "Auto Join Friend Predownloads");
+            MelonPreferences.CreateEntry(categoryName, "ShowStatusOnQM", showStatusOnQM, "Display download status on QM");
+            MelonPreferences.CreateEntry(categoryName, "ShowStatusOnHud", showStatusOnHud, "Display download status on HUD");
+            MelonPreferences.CreateEntry(categoryName, "ShowHudMessages", showHudMessages, "Show Hud Messages");
+            MelonPreferences.CreateEntry(categoryName, "ShowPopupsOnComplete", showPopupsOnComplete, "Show Popup On Complete");
             if (AdvancedInvites) 
-               MelonPrefs.RegisterBool(categoryName, "UseAdvancedInvitesPopup", tryUseAdvancedInvitePopup, "Accept invites using AdvancedInvites popup");
+                MelonPreferences.CreateEntry(categoryName, "UseAdvancedInvitesPopup", tryUseAdvancedInvitePopup, "Accept invites using AdvancedInvites popup");
         }
 
         public static void Apply()
         {
-            autoFollowInvites = MelonPrefs.GetBool(categoryName, "AutoFollowInvites");
-            autoFollowWorlds = MelonPrefs.GetBool(categoryName, "AutoFollowWorlds");
-            autoFollowFriends = MelonPrefs.GetBool(categoryName, "AutoFollowFriends");
-            showStatusOnQM = MelonPrefs.GetBool(categoryName, "ShowStatusOnQM");
-            showStatusOnHud = MelonPrefs.GetBool(categoryName, "ShowStatusOnHud");
-            showHudMessages = MelonPrefs.GetBool(categoryName, "ShowHudMessages");
-            showPopupsOnComplete = MelonPrefs.GetBool(categoryName, "ShowPopupsOnComplete");
+            autoFollowInvites = MelonPreferences.GetEntryValue<bool>(categoryName, "AutoFollowInvites");
+            autoFollowWorlds =  MelonPreferences.GetEntryValue<bool>(categoryName, "AutoFollowWorlds");
+            autoFollowFriends =  MelonPreferences.GetEntryValue<bool>(categoryName, "AutoFollowFriends");
+            showStatusOnQM =  MelonPreferences.GetEntryValue<bool>(categoryName, "ShowStatusOnQM");
+            showStatusOnHud =  MelonPreferences.GetEntryValue<bool>(categoryName, "ShowStatusOnHud");
+            showHudMessages =  MelonPreferences.GetEntryValue<bool>(categoryName, "ShowHudMessages");
+            showPopupsOnComplete =  MelonPreferences.GetEntryValue<bool>(categoryName, "ShowPopupsOnComplete");
             if(AdvancedInvites)
-                tryUseAdvancedInvitePopup = MelonPrefs.GetBool(categoryName, "UseAdvancedInvitesPopup");
+                tryUseAdvancedInvitePopup =  MelonPreferences.GetEntryValue<bool>(categoryName, "UseAdvancedInvitesPopup");
             if (showStatusOnQM)
                 WorldDownloadStatus.Enable();
             else 

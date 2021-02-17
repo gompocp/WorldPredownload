@@ -24,7 +24,7 @@ namespace WorldPredownload
         {
             Instance = this;
             ModSettings.RegisterSettings();
-            ModSettings.Apply();
+            //ModSettings.Apply();
             ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
             SetupSocialMenuPatch.Patch();
         }
@@ -39,14 +39,16 @@ namespace WorldPredownload
             HudIcon.Setup();
         }
 
-        public override void OnModSettingsApplied() => ModSettings.Apply();
-        public override void OnUpdate()
+        //public override void OnModSettingsApplied() => ModSettings.Apply();
+
+        public override void OnPreferencesLoaded()
         {
-            if (Input.GetKeyUp(KeyCode.P))
-            {
-               MelonLogger.Msg(SelectedNotificationListener.selectedContentButton.field_Public_String_0);
-            }
+            ModSettings.Apply();
         }
 
+        public override void OnPreferencesSaved()
+        {
+            ModSettings.Apply();
+        }
     }
 }

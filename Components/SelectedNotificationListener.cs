@@ -11,5 +11,7 @@ namespace WorldPredownload.Components
         public SelectedNotificationListener(IntPtr obj0) : base(obj0) {}
         public static VRCUiContentButton selectedContentButton;
         private void OnEnable() => selectedContentButton = transform.parent.GetComponent<VRCUiContentButton>();
+
+
     }
 }
