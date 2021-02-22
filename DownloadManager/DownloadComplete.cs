@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using MelonLoader;
 using UnhollowerRuntimeLib;
 using WorldPredownload.Cache;
@@ -8,6 +9,8 @@ using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternal
 
 namespace WorldPredownload.DownloadManager
 {
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
+    [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class DownloadComplete
     {
         public static OnDownloadComplete onCompleteDel;

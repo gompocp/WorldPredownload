@@ -65,8 +65,6 @@ namespace WorldPredownload
                 FriendButton.button.SetActive(true);
                 MelonCoroutines.Start(FriendButton.UpdateText());
             }
-
-
         }
     }
 

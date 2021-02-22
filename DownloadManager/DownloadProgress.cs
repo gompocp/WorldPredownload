@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using UnhollowerRuntimeLib;
 using UnityEngine.Networking;
 using WorldPredownload.UI;
@@ -6,6 +7,8 @@ using OnDownloadProgress = AssetBundleDownloadManager.MulticastDelegateNInternal
 
 namespace WorldPredownload.DownloadManager
 {
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
+    [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class DownloadProgress
     {
         private static OnDownloadProgress onProgressDel;

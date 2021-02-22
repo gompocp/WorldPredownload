@@ -214,8 +214,6 @@ namespace WorldPredownload
             }
             return null; //   (。_。)
         }
-
-        
         
         public static GameObject CloneGameObject(string pathToGameObject, string pathToParent)
         {
