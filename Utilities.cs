@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -21,6 +22,7 @@ using StringComparison = System.StringComparison;
 
 namespace WorldPredownload
 {
+    [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class Utilities
     {
         private static List<string> downloadWorldKeyWords =

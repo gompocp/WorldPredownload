@@ -27,14 +27,12 @@ namespace WorldPredownload.DownloadManager
                                 InviteButton.UpdateTextDownloadStopped();
                                 ClearDownload();
                                 if (message.Contains("Request aborted")) return;
-                                MelonLogger.LogError(url + " " + message + " " + reason);
+                                MelonLogger.LogError($"{url} {message} {reason}");
                                 Utilities.ShowDismissPopup(
                                     Constants.DOWNLOAD_ERROR_TITLE,
                                     Constants.DOWNLOAD_ERROR_MSG, 
                                     Constants.DOWNLOAD_ERROR_BTN_TEXT, 
-                                    new Action(delegate {
-                                        Utilities.HideCurrentPopup();
-                                    })
+                                    new Action(() => Utilities.HideCurrentPopup())    
                                 );
                             }
                         )
