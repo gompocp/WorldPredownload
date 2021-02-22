@@ -4,6 +4,6 @@
 
 # IntelliJ project files
 .idea
-*.iml
-out
-gen
+bin
+obj
+Folder.DotSettings.user
