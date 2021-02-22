@@ -9,26 +9,20 @@ namespace WorldPredownload.DownloadManager
 {
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
-    public static class DownloadProgress
+    public static partial class WorldDownloadManager
     {
-        private static OnDownloadProgress onProgressDel;
-        public static OnDownloadProgress GetOnProgressDel
-        {
-            get
-            {
-                if (onProgressDel != null) return onProgressDel;
-                onProgressDel = 
+        private static OnDownloadProgress onProgressDel = 
                     DelegateSupport.ConvertDelegate<OnDownloadProgress>(
                         new Action<UnityWebRequest>(
-                            delegate(UnityWebRequest request)
+                            (request)=>
                             {
-                                if (WorldDownloadManager.cancelled)
+                                if (cancelled)
                                 {
                                     request.Abort();
-                                    WorldDownloadManager.cancelled = false;
+                                    cancelled = false;
                                     return;
                                 }
-                                string size = request.GetResponseHeader("Content-Length");
+                                //string size = request.GetResponseHeader("Content-Length");
                                 if (request.downloadProgress >= 0 && 0.9 >= request.downloadProgress)
                                 {
                                     string progress = $"Progress:{((request.downloadProgress / 0.9) * 100).ToString("0")} %";
@@ -38,11 +32,8 @@ namespace WorldPredownload.DownloadManager
                                     if (WorldButton.canChangeText) WorldButton.button.SetText(progress);
                                     if (ModSettings.showStatusOnHud) HudIcon.Update((float)(request.downloadProgress/0.9));
                                 }
-                            
-                            }));
-                return onProgressDel;
-            }
-        }
-
+                            }
+                        )
+                    );
     }
 }

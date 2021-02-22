@@ -10,28 +10,22 @@ namespace WorldPredownload.DownloadManager
 {
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
-    public static class DownloadError
+    public partial class WorldDownloadManager
     {
-        private static OnDownloadError onErrorDel;
-        public static OnDownloadError GetOnErrorDel
-        {
-            get
-            {
-                if (onErrorDel != null) return onErrorDel;
-                onErrorDel = 
+        private static OnDownloadError onErrorDel = 
                     DelegateSupport.ConvertDelegate<OnDownloadError>(
                         new Action<string, string, LoadErrorReason>(
-                            delegate(string url, string message, LoadErrorReason reason)
+                            (url, message, reason) =>
                             {
-                                WorldDownloadManager.DownloadInfo.complete = true;
+                                DownloadInfo.complete = true;
                                 Utilities.ClearErrors();
                                 HudIcon.Disable();
                                 WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
-                                WorldDownloadManager.downloading = false;
+                                downloading = false;
                                 FriendButton.UpdateTextDownloadStopped();
                                 WorldButton.UpdateTextDownloadStopped();
                                 InviteButton.UpdateTextDownloadStopped();
-                                WorldDownloadManager.ClearDownload();
+                                ClearDownload();
                                 if (message.Contains("Request aborted")) return;
                                 MelonLogger.LogError(url + " " + message + " " + reason);
                                 Utilities.ShowDismissPopup(
@@ -42,11 +36,8 @@ namespace WorldPredownload.DownloadManager
                                         Utilities.HideCurrentPopup();
                                     })
                                 );
-                            
-                            }));
-                return onErrorDel;
-            }
-        }
-        
+                            }
+                        )
+                    );
     }
 }

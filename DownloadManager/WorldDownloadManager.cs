@@ -14,7 +14,7 @@ using MelonLoader;
 
 namespace WorldPredownload.DownloadManager
 {
-    public static class WorldDownloadManager
+    public static partial  class WorldDownloadManager
     {
         public static bool downloading { get; set; } = false;
         public static bool cancelled { get; set; }= false;
@@ -114,9 +114,9 @@ namespace WorldPredownload.DownloadManager
                 downloading = true;
                 Utilities.DownloadApiWorld(
                     apiWorld,
-                    DownloadProgress.GetOnProgressDel,
-                    DownloadComplete.GetOnCompleteDel,
-                    DownloadError.GetOnErrorDel,
+                    onProgressDel,
+                    onCompleteDel,
+                    onErrorDel,
                     true,
                     UnpackType.EnumValue1
                 );
