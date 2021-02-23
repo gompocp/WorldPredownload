@@ -24,6 +24,7 @@ namespace WorldPredownload
         {
             Instance = this;
             ModSettings.RegisterSettings();
+            ModSettings.Apply();
             ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
             ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
             SetupSocialMenuPatch.Patch();
