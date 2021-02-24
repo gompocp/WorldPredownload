@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using System.Reflection;
 using Harmony;
 using MelonLoader;
+using UnhollowerBaseLib.Attributes;
 using VRC.Core;
 using VRC.UI;
 using WorldPredownload.Cache;
@@ -22,16 +24,26 @@ namespace WorldPredownload
     {
         static void Prefix() => WorldDownloadManager.CancelDownload();
     }
-
-    [HarmonyPatch(typeof(PageWorldInfo), "Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_0")]
-    class SetupWorldInfoPatch
-    {
-        static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
-    }
     
-    class SetupSocialMenuPatch
+    class WorldInfoPatch
     {
-        public static void Patch()
+        public static void Setup()
+        {
+            WorldPredownload.HarmonyInstance.Patch(typeof(PageWorldInfo).GetMethods().Where(m => m.Name.StartsWith("Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_") && !m.Name.Contains("PDM"))
+                    .OrderBy(m => m.GetCustomAttribute<CallerCountAttribute>().Count)
+                    .Last()
+                ,
+                null,
+                new HarmonyMethod(typeof(WorldInfoPatch).GetMethod(nameof(Postfix)))
+            );
+        }
+
+        public static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
+    }
+
+    class SocialMenuPatch
+    {
+        public static void Setup()
         {
             WorldPredownload.HarmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Single(
                     m => m.ReturnType == typeof(void)
@@ -42,7 +54,7 @@ namespace WorldPredownload
                          && !m.Name.Contains("PDM")
                 ),
                 null,
-                new HarmonyMethod(typeof(SetupSocialMenuPatch).GetMethod(nameof(Postfix)))
+                new HarmonyMethod(typeof(SocialMenuPatch).GetMethod(nameof(Postfix)))
             );
         }
 
@@ -67,5 +79,4 @@ namespace WorldPredownload
             }
         }
     }
-
 }

@@ -14,7 +14,6 @@ namespace WorldPredownload.Cache
         public static System.Collections.IEnumerator UpdateDirectoriesBackground()
         {
             yield return null;
-            MelonLogger.Msg($"Using cache path: {GetCache().path}");
             Stopwatch timer = new Stopwatch();
             timer.Start();
             directories.Clear();
