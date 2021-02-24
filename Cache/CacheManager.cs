@@ -1,23 +1,20 @@
 ﻿using MelonLoader;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Diagnostics;
 
-
 namespace WorldPredownload.Cache
 {
     public class CacheManager
     {
-        private const string NULL_STRING_ARGUMENT = "Tried to check if null string was downloaded";
-
         private static HashSet<string> directories = new HashSet<string>(); //Still not sure if its even worth using this lel
 
         public static System.Collections.IEnumerator UpdateDirectoriesBackground()
         {
             yield return null;
+            MelonLogger.Msg($"Using cache path: {GetCache().path}");
             Stopwatch timer = new Stopwatch();
             timer.Start();
             directories.Clear();
@@ -29,10 +26,8 @@ namespace WorldPredownload.Cache
             MelonLogger.Log($"Finished getting { directories.Count } cache entries in { timer.ElapsedMilliseconds }ms");
         }
 
-        public static void AddDirectory(string hash)
-        {
-            directories.Add(hash);
-        }
+        public static void AddDirectory(string hash) => directories.Add(hash);
+
 
         public static bool HasDownloadedWorld(string id)
         {
@@ -41,10 +36,10 @@ namespace WorldPredownload.Cache
 
         public static bool HasDownloadedWorld(string id, int version)
         {
-            _ = id ?? throw new ArgumentNullException(paramName: nameof(id), message: NULL_STRING_ARGUMENT); //Lazy null check
-            if (directories.Contains(ComputeAssetHash(id)))
+            string hash = ComputeAssetHash(id);
+            if (directories.Contains(hash))
             {
-                if (HasVersion(ComputeAssetHash(id), version))
+                if (HasVersion(hash, version))
                     return true;
                 return false;
             }
@@ -56,10 +51,7 @@ namespace WorldPredownload.Cache
             return Utilities.ByteArrayToString(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(id))).ToUpper().Substring(0, 16);
         }
 
-        private static UnityEngine.Cache GetCache()
-        {
-            return Utilities.GetAssetBundleDownloadManager().field_Private_Cache_0;
-        }
+        private static UnityEngine.Cache GetCache() => Utilities.GetAssetBundleDownloadManager().field_Private_Cache_0;
 
         private static bool HasVersion(string hash, int version)
         {

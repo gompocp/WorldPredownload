@@ -2,6 +2,7 @@
 using MelonLoader;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using VRC;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
 
@@ -29,20 +30,24 @@ namespace WorldPredownload
             ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
             SetupSocialMenuPatch.Patch();
         }
-        
+
         public override void VRChat_OnUiManagerInit()
         {
-            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeNotificationsMenu/ScrollRect/ViewPort/Content/NotificationUiPrefab/Row_NotificationActions").AddComponent<SelectedNotificationListener>();
-            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeInviteResponseMoreOptionsMenu").AddComponent<NotificationMoreListener>();
+            GameObject.Find(
+                    "UserInterface/QuickMenu/QuickModeMenus/QuickModeNotificationsMenu/ScrollRect/ViewPort/Content/NotificationUiPrefab/Row_NotificationActions")
+                .AddComponent<SelectedNotificationListener>();
+            GameObject.Find("UserInterface/QuickMenu/QuickModeMenus/QuickModeInviteResponseMoreOptionsMenu")
+                .AddComponent<NotificationMoreListener>();
             InviteButton.Setup();
             FriendButton.Setup();
             WorldButton.Setup();
             WorldDownloadStatus.Setup();
             HudIcon.Setup();
         }
-        
+
         public override void OnPreferencesLoaded() => ModSettings.Apply();
-        
+
         public override void OnPreferencesSaved() => ModSettings.Apply();
+        
     }
 }

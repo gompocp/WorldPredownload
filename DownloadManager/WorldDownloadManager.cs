@@ -6,7 +6,7 @@ using OnDownloadError = AssetBundleDownloadManager.MulticastDelegateNInternalSea
 using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using WorldPredownload.UI;
 using System;
-using BestHTTP.SecureProtocol.Org.BouncyCastle.Math.Raw;
+using Harmony;
 using VRC.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +14,7 @@ using MelonLoader;
 
 namespace WorldPredownload.DownloadManager
 {
-    public static partial  class WorldDownloadManager
+    public static partial class WorldDownloadManager
     {
         public static bool downloading { get; set; } = false;
         public static bool cancelled { get; set; }= false;
@@ -136,10 +136,6 @@ namespace WorldPredownload.DownloadManager
             if (downloadInfo.DownloadType == DownloadType.Invite && !downloading)
                 MelonCoroutines.Start(InviteButton.InviteButtonTimer(15));
             DownloadWorld(downloadInfo.ApiWorld);
-            
-           
-
         }
-        
     }
 }
