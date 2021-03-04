@@ -19,6 +19,7 @@ namespace WorldPredownload.DownloadManager
                             (download) =>
                             {
                                 if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Download Finished");
+                                if(ModSettings.hideQMStatusWhenInActive) WorldDownloadStatus.Disable();
                                 DownloadInfo.complete = true;
                                 downloading = false;
                                 CacheManager.AddDirectory(CacheManager.ComputeAssetHash(DownloadInfo.ApiWorld.id));

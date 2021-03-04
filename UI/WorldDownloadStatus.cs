@@ -14,7 +14,7 @@ namespace WorldPredownload.UI
         {
             gameObject = Utilities.CloneGameObject(PATH_TO_GAMEOBJECT_TO_CLONE, PATH_TO_CLONE_PARENT);
             gameObject.GetRectTrans().SetAnchoredPos(Constants.DWLD_STATUS_POS);
-            if (ModSettings.showStatusOnQM) gameObject.SetActive(true);
+            if (ModSettings.showStatusOnQM && !ModSettings.hideQMStatusWhenInActive) gameObject.SetActive(true);
             else gameObject.SetActive(false);
             gameObject.SetName(Constants.DOWNLOAD_STATUS_NAME);
             gameObject.GetComponent<VRC.UI.DebugDisplayText>().enabled = false;

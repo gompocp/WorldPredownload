@@ -11,9 +11,8 @@ namespace WorldPredownload.Cache
     {
         private static HashSet<string> directories = new HashSet<string>(); //Still not sure if its even worth using this lel
 
-        public static System.Collections.IEnumerator UpdateDirectoriesBackground()
+        public static void UpdateDirectoriesThread()
         {
-            yield return null;
             Stopwatch timer = new Stopwatch();
             timer.Start();
             directories.Clear();

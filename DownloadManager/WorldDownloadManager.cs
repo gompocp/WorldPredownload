@@ -110,6 +110,7 @@ namespace WorldPredownload.DownloadManager
             if (!downloading)
             {
                 if(ModSettings.showStatusOnHud) HudIcon.Enable();
+                if(ModSettings.showStatusOnQM) WorldDownloadStatus.Enable();
                 if(ModSettings.showHudMessages) Utilities.QueueHudMessage("Starting Download");
                 downloading = true;
                 Utilities.DownloadApiWorld(

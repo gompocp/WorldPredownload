@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Harmony;
 using MelonLoader;
 using UnhollowerBaseLib.Attributes;
@@ -16,7 +17,7 @@ namespace WorldPredownload
     [HarmonyPatch(typeof(NetworkManager), "OnJoinedRoom")]
     class OnJoinedRoomPatch
     {
-        static void Prefix() => MelonCoroutines.Start(CacheManager.UpdateDirectoriesBackground());
+        static void Prefix() => new Thread(CacheManager.UpdateDirectoriesThread).Start();
     }
 
     [HarmonyPatch(typeof(NetworkManager), "OnLeftRoom")]

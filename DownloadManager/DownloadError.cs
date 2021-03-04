@@ -20,6 +20,7 @@ namespace WorldPredownload.DownloadManager
                                 DownloadInfo.complete = true;
                                 Utilities.ClearErrors();
                                 HudIcon.Disable();
+                                if(ModSettings.hideQMStatusWhenInActive) WorldDownloadStatus.Disable();
                                 WorldDownloadStatus.gameObject.SetText(Constants.DOWNLOAD_STATUS_IDLE_TEXT);
                                 downloading = false;
                                 FriendButton.UpdateTextDownloadStopped();
