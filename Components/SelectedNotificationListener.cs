@@ -1,8 +1,10 @@
 ﻿using System;
+using MelonLoader;
 using UnityEngine;
 
 namespace WorldPredownload.Components
 {
+    [RegisterTypeInIl2Cpp]
     class SelectedNotificationListener : MonoBehaviour
     {
         public SelectedNotificationListener(IntPtr obj0) : base(obj0) {}

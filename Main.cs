@@ -1,6 +1,5 @@
 ﻿using Harmony;
 using MelonLoader;
-using UnhollowerRuntimeLib;
 using UnityEngine;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
@@ -25,8 +24,6 @@ namespace WorldPredownload
             Instance = this;
             ModSettings.RegisterSettings();
             ModSettings.Apply();
-            ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
-            ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
             SocialMenuPatch.Setup();
             WorldInfoPatch.Setup();
         }
