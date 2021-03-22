@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Harmony;
 using MelonLoader;
+using UnhollowerBaseLib;
 using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using VRC.Core;
@@ -27,25 +30,47 @@ namespace WorldPredownload
         static void Prefix() => WorldDownloadManager.CancelDownload();
     }
     
-    class WorldInfoPatch
+    class WorldInfoSetup
     {
-        public static void Setup()
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void WorldInfoSetupDelegate(IntPtr thisPtr, IntPtr apiWorld, IntPtr apiWorldInstance, bool something1, bool something2);
+
+        private static WorldInfoSetupDelegate worldInfoSetupDelegate;
+        public static void Patch()
         {
-            WorldPredownload.HarmonyInstance.Patch(typeof(PageWorldInfo).GetMethods().Where(m => m.Name.StartsWith("Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_") && !m.Name.Contains("PDM"))
+            unsafe
+            {
+                var setupMethod = typeof(PageWorldInfo).GetMethods().Where(m =>
+                        m.Name.StartsWith("Method_Public_Void_ApiWorld_ApiWorldInstance_Boolean_Boolean_") &&
+                        !m.Name.Contains("PDM"))
                     .OrderBy(m => m.GetCustomAttribute<CallerCountAttribute>().Count)
-                    .Last()
-                ,
-                null,
-                new HarmonyMethod(typeof(WorldInfoPatch).GetMethod(nameof(Postfix)))
-            );
+                    .Last();
+                var originalMethod = *(IntPtr*) (IntPtr) UnhollowerUtils
+                    .GetIl2CppMethodInfoPointerFieldForGeneratedMethod(setupMethod).GetValue(null);
+                Imports.Hook((IntPtr) (&originalMethod),
+                    typeof(WorldInfoSetup).GetMethod(nameof(Postfix),
+                        BindingFlags.Static | BindingFlags.Public)!.MethodHandle.GetFunctionPointer());
+                worldInfoSetupDelegate = Marshal.GetDelegateForFunctionPointer<WorldInfoSetupDelegate>(originalMethod);
+            }
         }
 
-        public static void Postfix(ApiWorld __0 = null) => WorldButton.UpdateText(__0);
+        public static void Postfix(IntPtr thisPtr, IntPtr apiWorldPtr, IntPtr apiWorldInstancePtr, bool something1, bool something2)
+        {
+            try
+            {
+                worldInfoSetupDelegate(thisPtr, apiWorldPtr, apiWorldInstancePtr, something1, something2);
+                if (apiWorldPtr != IntPtr.Zero) WorldButton.UpdateText(new ApiWorld(apiWorldPtr));
+            }
+            catch(Exception e)
+            {
+                MelonLogger.Error($"Something went horribly wrong in WorldInfoSetup Patch: {e}");
+            }
+        }
     }
 
-    class SocialMenuPatch
+    class SocialMenuSetup
     {
-        public static void Setup()
+        public static void Patch()
         {
             WorldPredownload.HarmonyInstance.Patch(typeof(PageUserInfo).GetMethods().Single(
                     m => m.ReturnType == typeof(void)
@@ -56,7 +81,7 @@ namespace WorldPredownload
                          && !m.Name.Contains("PDM")
                 ),
                 null,
-                new HarmonyMethod(typeof(SocialMenuPatch).GetMethod(nameof(Postfix)))
+                new HarmonyMethod(typeof(SocialMenuSetup).GetMethod(nameof(Postfix)))
             );
         }
 
@@ -80,11 +105,5 @@ namespace WorldPredownload
                 MelonCoroutines.Start(FriendButton.UpdateText());
             }
         }
-    }
-
-    [HarmonyLib.HarmonyPatch(typeof(AssetBundle), "LoadFromFile")]
-    class Bundle
-    {
-        static void Prefix(ref string __0) => MelonLogger.Msg(__0);
     }
 }

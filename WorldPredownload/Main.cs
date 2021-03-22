@@ -1,5 +1,6 @@
 ﻿using Harmony;
 using MelonLoader;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
@@ -24,8 +25,10 @@ namespace WorldPredownload
             Instance = this;
             ModSettings.RegisterSettings();
             ModSettings.Apply();
-            SocialMenuPatch.Setup();
-            WorldInfoPatch.Setup();
+            SocialMenuSetup.Patch();
+            WorldInfoSetup.Patch();
+            ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
+            ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
         }
 
         public override void VRChat_OnUiManagerInit()
@@ -42,6 +45,5 @@ namespace WorldPredownload
         public override void OnPreferencesLoaded() => ModSettings.Apply();
 
         public override void OnPreferencesSaved() => ModSettings.Apply();
-        
     }
 }
