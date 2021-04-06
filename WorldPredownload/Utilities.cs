@@ -25,8 +25,7 @@ namespace WorldPredownload
     [SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
     public static class Utilities
     {
-        private static List<string> downloadWorldKeyWords =
-            new List<string>(new string[] {"vrcw", "Worlds", "Failed to parse world '", "' UnityVersion '"});
+        private static List<string> downloadWorldKeyWords = new(new[] {"vrcw", "Worlds", "Failed to parse world '", "' UnityVersion '"});
         
         private static MethodInfo worldInfoGoMethodInfo;
 
@@ -125,7 +124,7 @@ namespace WorldPredownload
             get
             {
                 if (pushUIPageDelegate != null) return pushUIPageDelegate;
-                MethodInfo pushPageMethod = typeof(VRCUiManager).GetMethods().Single(
+                MethodInfo pushPageMethod = typeof(VRCUiManager).GetMethods().First(
                     m => m.GetParameters().Length == 1
                     && m.GetParameters()[0].ParameterType == typeof(VRCUiPage)
                     && !m.Name.Contains("PDM")

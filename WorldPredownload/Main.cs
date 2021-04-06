@@ -1,5 +1,10 @@
-﻿using Harmony;
+﻿using System;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using Harmony;
 using MelonLoader;
+using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using WorldPredownload.Components;
@@ -11,7 +16,7 @@ namespace WorldPredownload
     {
         public const string Name = "WorldPredownload";
         public const string Author = "gompo";
-        public const string Version = "1.3.8";
+        public const string Version = "1.4.0";
         public const string DownloadLink = "https://github.com/gompocp/WorldPredownload/releases";
     }
 
@@ -41,7 +46,7 @@ namespace WorldPredownload
             WorldDownloadStatus.Setup();
             HudIcon.Setup();
         }
-
+        
         public override void OnPreferencesLoaded() => ModSettings.Apply();
 
         public override void OnPreferencesSaved() => ModSettings.Apply();

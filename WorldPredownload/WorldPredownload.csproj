@@ -68,7 +68,7 @@
       <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\..\..\..\..\..\Programs\Software\SteamLibrary\steamapps\common\VRChat\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
       </Reference>
-      <Reference Include="MelonLoader, Version=0.3.1.0, Culture=neutral, PublicKeyToken=null">
+      <Reference Include="MelonLoader, Version=0.3.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\..\..\..\..\..\Programs\Software\SteamLibrary\steamapps\common\VRChat\MelonLoader\MelonLoader.dll</HintPath>
       </Reference>
       <Reference Include="System" />
@@ -105,9 +105,6 @@
       <Reference Include="VRCSDKBase, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\..\..\..\..\Programs\Software\SteamLibrary\steamapps\common\VRChat\MelonLoader\Managed\VRCSDKBase.dll</HintPath>
       </Reference>
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include=".gitignore" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
