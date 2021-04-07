@@ -46,18 +46,13 @@ namespace WorldPredownload
             get
             {
                 if (downloadWorldDelegate != null) return downloadWorldDelegate;
-                foreach (MethodInfo methodInfo in typeof(AssetBundleDownloadManager).GetMethods().Where(m => 
-                            m.Name.StartsWith("Method_Internal_Void_") 
-                            && CheckXrefStrings(m, downloadWorldKeyWords))
-                        )
-                {
+                MethodInfo method = WorldDownMethodInfo;
                     downloadWorldDelegate = (DownloadWorldDelegate)Delegate.CreateDelegate(
                     typeof(DownloadWorldDelegate),
                     AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0,
-                    methodInfo);
-                    return downloadWorldDelegate;
-                }
-                return null;
+                    WorldDownMethodInfo
+                );
+                return downloadWorldDelegate;
             }
         }
 
@@ -66,13 +61,11 @@ namespace WorldPredownload
             get
             {
                 if (clearErrorsDelegate != null) return clearErrorsDelegate;
-                MethodInfo clearErrors = typeof(AssetBundleDownloadManager).GetMethods().Where(
-                    m => 
-                        m.Name.StartsWith("Method_Internal_Void_") 
-                        && !m.Name.Contains("PDM")
-                        && m.ReturnType == typeof(void) 
-                        && (m.GetParameters().Length == 0)
-                    ).First();
+                MethodInfo clearErrors = typeof(AssetBundleDownloadManager).GetMethods().First(
+                    m => m.Name.StartsWith("Method_Internal_Void_") 
+                    && !m.Name.Contains("PDM")
+                    && m.ReturnType == typeof(void) 
+                    && (m.GetParameters().Length == 0));
                 clearErrorsDelegate = (ClearErrorsDelegate)Delegate.CreateDelegate(
                         typeof(ClearErrorsDelegate),
                         AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0,
@@ -196,6 +189,19 @@ namespace WorldPredownload
             GetShowDismissPopupDelegate(title, body, middleButtonText, buttonAction);
         }
 
+        public static MethodInfo worldDownloadMethodInfo;
+
+        public static MethodInfo WorldDownMethodInfo
+        {
+            get
+            {
+                if (worldDownloadMethodInfo != null) return worldDownloadMethodInfo;
+                worldDownloadMethodInfo = typeof(AssetBundleDownloadManager).GetMethods().Single(m => m.Name.StartsWith("Method_Internal_Void_") && CheckXrefStrings(m, downloadWorldKeyWords));
+                return worldDownloadMethodInfo;
+            }
+        }
+        
+        
         public static void ShowPage(VRCUiPage page) => GetPushUIPageDelegate(page);
 
         public static AssetBundleDownloadManager GetAssetBundleDownloadManager()

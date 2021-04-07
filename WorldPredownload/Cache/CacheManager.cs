@@ -9,14 +9,14 @@ namespace WorldPredownload.Cache
 {
     public class CacheManager
     {
-        private static HashSet<string> directories = new HashSet<string>(); //Still not sure if its even worth using this lel
+        private static HashSet<string> directories = new (); 
 
-        public static void UpdateDirectoriesThread()
+        public static void UpdateDirectories()
         {
             Stopwatch timer = new Stopwatch();
             timer.Start();
             directories.Clear();
-            foreach (var entry in Directory.EnumerateDirectories(GetCache().path)) // Slightly better performance 2000 entries in 95ms~ vs 2000 entries in 70ms~ with testing on my poor cpu ¯\_(ツ)_/¯ 
+            foreach (var entry in Directory.EnumerateDirectories(GetCache().path)) 
             {
                 directories.Add(new DirectoryInfo(entry).Name);
             }
@@ -73,5 +73,15 @@ namespace WorldPredownload.Cache
             return result += "000000";
         }
 
+        public static bool WorldFileExists(string id)
+        {
+            DirectoryInfo expectedLocation = new DirectoryInfo(Path.Combine(GetCache().path, ComputeAssetHash(id)));
+            if (!Directory.Exists(expectedLocation.FullName)) return false;
+            foreach (var file in expectedLocation.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                if (file.Name.Contains("__data")) return true;
+            }
+            return false;
+        }
     }
 }

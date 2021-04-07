@@ -1,12 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using Harmony;
+﻿using Harmony;
 using MelonLoader;
-using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using UnityEngine;
+using WorldPredownload.Cache;
 using WorldPredownload.Components;
 using WorldPredownload.UI;
 
@@ -32,6 +28,7 @@ namespace WorldPredownload
             ModSettings.Apply();
             SocialMenuSetup.Patch();
             WorldInfoSetup.Patch();
+            WorldDownloadListener.Patch();
             ClassInjector.RegisterTypeInIl2Cpp<SelectedNotificationListener>();
             ClassInjector.RegisterTypeInIl2Cpp<NotificationMoreListener>();
         }
@@ -45,6 +42,7 @@ namespace WorldPredownload
             WorldButton.Setup();
             WorldDownloadStatus.Setup();
             HudIcon.Setup();
+            CacheManager.UpdateDirectories();
         }
         
         public override void OnPreferencesLoaded() => ModSettings.Apply();
