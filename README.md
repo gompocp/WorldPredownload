@@ -1,4 +1,4 @@
-# WorldPredownload ![Downloads](https://img.shields.io/github/downloads/gompocp/WorldPredownload/total?color=darkgreen) ![Current Version](https://img.shields.io/github/v/release/gompocp/WorldPredownload?color=blue)<br>
+# WorldPredownload ![Current Version](https://img.shields.io/github/v/release/gompocp/WorldPredownload?color=blue)<br>
 - Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file
 - Credit to [Ben](https://github.com/BenjaminZehowlt/DynamicBonesSafety) for xref scanning mechanism and hud icon idea
 - Credit to [Knah](https://github.com/knah/) for [Enable Listener](https://github.com/knah/VRCMods/blob/master/UIExpansionKit/Components/EnableDisableListener.cs) and the [hud icon method](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L120) that I changed to use here along with the [assetbundle loading mechanism](https://github.com/knah/VRCMods/blob/master/JoinNotifier/JoinNotifierMod.cs#L61)
