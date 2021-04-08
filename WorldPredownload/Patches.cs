@@ -1,33 +1,23 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using Harmony;
 using MelonLoader;
+using Transmtn.DTO.Notifications;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Attributes;
-using UnhollowerRuntimeLib;
-using VRC.Core;
 using VRC.UI;
+using VRC.Core;
 using WorldPredownload.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
-using File = Il2CppSystem.IO.File;
 using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa9vUnique;
 using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
-using Object = Il2CppSystem.Object;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
 
 namespace WorldPredownload
 {
-    //[HarmonyPatch(typeof(NetworkManager), "OnJoinedRoom")]
-    class OnJoinedRoomPatch
-    {
-        static void Prefix() => new Task(CacheManager.UpdateDirectories).Start();
-    }
-
     [HarmonyPatch(typeof(NetworkManager), "OnLeftRoom")]
     class OnLeftRoomPatch
     {
@@ -84,25 +74,41 @@ namespace WorldPredownload
         }
         public static void Prefix(ApiWorld __0, ref OnDownloadComplete __2)
         {
-            __2 = new OnDownloadComplete(
-                IL2CPP.Il2CppObjectBaseToPtr(
-                    Il2CppSystem.Delegate.Combine(
-                        __2,
-                        DelegateSupport.ConvertDelegate<OnDownloadComplete>(
-                            new Action<AssetBundleDownload>(
-                                _ =>
-                                {
-                                    if (CacheManager.WorldFileExists(__0.id))
-                                        CacheManager.AddDirectory(CacheManager.ComputeAssetHash(__0.id));
-                                    else
-                                        MelonLogger.Warning(
-                                            $"Failed to verify world {__0.id} was downloaded. Pls report to gompo");
-                                }
-                            )
-                        )
+            __2 = Il2CppSystem.Delegate.Combine(
+                    __2,
+                    (OnDownloadComplete)new Action<AssetBundleDownload>(
+                            _ =>
+                            {
+                                if (CacheManager.WorldFileExists(__0.id))
+                                    CacheManager.AddDirectory(CacheManager.ComputeAssetHash(__0.id));
+                                else
+                                    MelonLogger.Warning($"Failed to verify world {__0.id} was downloaded. No idea why this would happen");
+                            }
                     )
-                )
-            );
+            ).Cast<OnDownloadComplete>();
+        }
+    }
+    
+    //I accidently found that this neat little method which opens the notification more actions page a while ago while fixing up advanced invites 
+    //[HarmonyPatch(typeof(NotificationManager), "Method_Private_Void_Notification_1")]
+    class NotificationMoreActions
+    {
+        public static Notification selectedNotification { get; private set; }
+
+        public static void Patch()
+        {
+            var openMoreActionsMethod = typeof(NotificationManager).GetMethods()
+                .Where(m =>
+                    m.Name.StartsWith("Method_Private_Void_Notification_") &&
+                    !m.Name.Contains("PDM"))
+                .OrderBy(m => m.GetCustomAttribute<CallerCountAttribute>().Count)
+                .Last();
+            WorldPredownload.HarmonyInstance.Patch(openMoreActionsMethod, new HarmonyMethod(typeof(NotificationMoreActions).GetMethod(nameof(Prefix))));
+        }
+        public static void Prefix(Notification __0)
+        {
+            selectedNotification = __0;
+            InviteButton.UpdateText();
         }
     }
 

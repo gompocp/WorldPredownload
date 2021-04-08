@@ -14,7 +14,6 @@ using UnpackType = AssetBundleDownloadManager.EnumNInternalSealedva3vUnique;
 using VRC.Core;
 using UnityEngine.EventSystems;
 using VRC.SDKBase;
-using WorldPredownload.Components;
 using WorldPredownload.DownloadManager;
 using Delegate = System.Delegate;
 using Exception = System.Exception;
@@ -79,9 +78,10 @@ namespace WorldPredownload
             get
             {
                 if (showDismissPopupDelegate != null) return showDismissPopupDelegate;
-                MethodInfo popupMethod = typeof(VRCUiPopupManager).GetMethods(BindingFlags.Public | BindingFlags.Instance).Single(
+                MethodInfo popupMethod = typeof(VRCUiPopupManager).GetMethods(BindingFlags.Public | BindingFlags.Instance).First(
                     m => 
                     m.GetParameters().Length == 5 
+                    
                     && m.XRefScanFor("Popups/StandardPopupV2")
                 );
 
@@ -213,12 +213,7 @@ namespace WorldPredownload
 
         public static Notification GetSelectedNotification()
         {
-            string toFindID = SelectedNotificationListener.selectedContentButton.field_Public_String_0;
-            foreach (var notif in MonoBehaviour1PublicGaBoLi1NoObSoSoUnique.field_Private_Static_List_1_Notification_0)
-            {
-                if (notif.id.Equals(toFindID)) return notif;
-            }
-            return null; //   (。_。)
+            return NotificationMoreActions.selectedNotification;
         }
         
         public static GameObject CloneGameObject(string pathToGameObject, string pathToParent)
