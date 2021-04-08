@@ -11,12 +11,13 @@ using UnhollowerBaseLib.Attributes;
 using UnhollowerRuntimeLib;
 using VRC.Core;
 using VRC.UI;
+using WorldPredownload.UI;
 using WorldPredownload.Cache;
 using WorldPredownload.DownloadManager;
-using WorldPredownload.UI;
 using File = Il2CppSystem.IO.File;
 using InfoType = VRC.UI.PageUserInfo.EnumNPublicSealedvaNoOnOfSeReBlInFa9vUnique;
 using ListType = UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique;
+using Object = Il2CppSystem.Object;
 using OnDownloadComplete = AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique;
 
 namespace WorldPredownload
@@ -36,7 +37,7 @@ namespace WorldPredownload
     class WorldInfoSetup
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void WorldInfoSetupDelegate(IntPtr thisPtr, IntPtr apiWorld, IntPtr apiWorldInstance, bool something1, bool something2, IntPtr additionalJunk);
+        private delegate void WorldInfoSetupDelegate(IntPtr thisPtr, IntPtr apiWorld, IntPtr apiWorldInstance, byte something1, byte something2, IntPtr additionalJunk);
 
         private static WorldInfoSetupDelegate worldInfoSetupDelegate;
         public static void Patch()
@@ -59,7 +60,7 @@ namespace WorldPredownload
             }
         }
 
-        public static void Postfix(IntPtr thisPtr, IntPtr apiWorldPtr, IntPtr apiWorldInstancePtr, bool something1, bool something2, IntPtr additionalJunkPtr)
+        public static void Postfix(IntPtr thisPtr, IntPtr apiWorldPtr, IntPtr apiWorldInstancePtr, byte something1, byte something2, IntPtr additionalJunkPtr)
         {
             try
             {
@@ -73,56 +74,35 @@ namespace WorldPredownload
         }
     }
 
+    
     class WorldDownloadListener
     {
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void WorldDownloadDelegate(IntPtr thisPtr, IntPtr apiWorld, IntPtr someDelegate1, IntPtr onSuccess, IntPtr someDelegate2, bool someBool, IntPtr someEnum, IntPtr additionalJunk);
-        private static WorldDownloadDelegate worldDownloadDelegate;
         public static void Patch()
         {
-            unsafe
-            {
-                // Thanks to Knah
-                var originalMethod = *(IntPtr*) (IntPtr) UnhollowerUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(Utilities.WorldDownMethodInfo).GetValue(null);
-                
-                Imports.Hook((IntPtr) (&originalMethod), typeof(WorldDownloadListener).GetMethod(nameof(WorldDownloadPatch), BindingFlags.Static | BindingFlags.Public)!.MethodHandle.GetFunctionPointer());
-                
-                worldDownloadDelegate = Marshal.GetDelegateForFunctionPointer<WorldDownloadDelegate>(originalMethod);
-            }
+            WorldPredownload.HarmonyInstance.Patch(Utilities.WorldDownloadMethodInfo, 
+                new HarmonyMethod(typeof(WorldDownloadListener).GetMethod(nameof(Prefix))));
         }
-        public static void WorldDownloadPatch(IntPtr thisPtr, IntPtr apiWorldPtr, IntPtr someDelegate1Ptr, IntPtr onSuccessPtr, IntPtr someDelegate2Ptr, bool someBool, IntPtr someEnumPtr, IntPtr additionalJunkPtr)
+        public static void Prefix(ApiWorld __0, ref OnDownloadComplete __2)
         {
-            try
-            {
-                var apiWorld = apiWorldPtr != IntPtr.Zero ? new ApiWorld(apiWorldPtr) : null;
-                if (onSuccessPtr != IntPtr.Zero && apiWorld != null)
-                {
-                    var successDelegate =
-                        new AssetBundleDownloadManager.MulticastDelegateNInternalSealedVoObUnique(onSuccessPtr);
-                    //Il2CppSystem.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate <---- Dont use. Unhollower no likey
-                    onSuccessPtr = IL2CPP.Il2CppObjectBaseToPtr(
-                        Il2CppSystem.Delegate.Combine(
-                            successDelegate,
-                            DelegateSupport.ConvertDelegate<OnDownloadComplete>(
-                                new Action<AssetBundleDownload>(
-                                    (_) =>
-                                    {
-                                        if (CacheManager.WorldFileExists(apiWorld.id)) 
-                                            CacheManager.AddDirectory(CacheManager.ComputeAssetHash(apiWorld.id));
-                                        else 
-                                            MelonLogger.Warning($"Failed to verify world {apiWorld.id} was downloaded. Pls report to gompo");
-                                    }
-                                )
+            __2 = new OnDownloadComplete(
+                IL2CPP.Il2CppObjectBaseToPtr(
+                    Il2CppSystem.Delegate.Combine(
+                        __2,
+                        DelegateSupport.ConvertDelegate<OnDownloadComplete>(
+                            new Action<AssetBundleDownload>(
+                                _ =>
+                                {
+                                    if (CacheManager.WorldFileExists(__0.id))
+                                        CacheManager.AddDirectory(CacheManager.ComputeAssetHash(__0.id));
+                                    else
+                                        MelonLogger.Warning(
+                                            $"Failed to verify world {__0.id} was downloaded. Pls report to gompo");
+                                }
                             )
                         )
-                    );
-                }
-                worldDownloadDelegate(thisPtr, apiWorldPtr, someDelegate1Ptr, onSuccessPtr, someDelegate2Ptr, someBool, someEnumPtr, additionalJunkPtr);
-            }
-            catch(Exception e)
-            {
-                MelonLogger.Error($"Something went horribly wrong in World Download Patch, pls report to gompo: {e}");
-            }
+                    )
+                )
+            );
         }
     }
 

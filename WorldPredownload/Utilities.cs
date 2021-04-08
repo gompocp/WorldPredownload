@@ -46,11 +46,10 @@ namespace WorldPredownload
             get
             {
                 if (downloadWorldDelegate != null) return downloadWorldDelegate;
-                MethodInfo method = WorldDownMethodInfo;
-                    downloadWorldDelegate = (DownloadWorldDelegate)Delegate.CreateDelegate(
+                downloadWorldDelegate = (DownloadWorldDelegate)Delegate.CreateDelegate(
                     typeof(DownloadWorldDelegate),
                     AssetBundleDownloadManager.prop_AssetBundleDownloadManager_0,
-                    WorldDownMethodInfo
+                    WorldDownloadMethodInfo
                 );
                 return downloadWorldDelegate;
             }
@@ -191,7 +190,7 @@ namespace WorldPredownload
 
         public static MethodInfo worldDownloadMethodInfo;
 
-        public static MethodInfo WorldDownMethodInfo
+        public static MethodInfo WorldDownloadMethodInfo
         {
             get
             {
