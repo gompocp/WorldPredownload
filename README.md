@@ -9,6 +9,14 @@
 - If you go to another world while downloading, it'll cancel the download 
 - Performance may degrade for split second on world enter due to you having a large cache size 
 
+# v1.4.1 Changes
+- Removed Components (VRChat cloned one of them 100 times 👀). This should make the mod just that little bit more optimized.
+- Fixed Dismiss Popup XRef failing
+- Added a new setting to hide "Not Downloading" text when not downloading
+- Cache will only be fetched once now (on start up) (again, it makes the mod just that little bit more optimized) It'll add other worlds you download while playing through the use of magic.
+- Future-proofed some stuff (for ML v0.3.1)
+- Fixed "Go to world page" button on popup throwing an exception
+
 # v1.3.6 Changes 
 - Added back invite predownloading 👌
 
