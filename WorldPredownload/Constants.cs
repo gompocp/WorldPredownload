@@ -4,9 +4,10 @@ namespace WorldPredownload
 {
     public static class Constants
     {
-        public const string INVITE_BUTTON_NAME = "PreloadInviteButton";
-        public const string FRIEND_BUTTON_NAME = "PreloadFriendButton";
-        public const string WORLD_BUTTON_NAME = "PreloadWorldButton";
+        public const string INVITE_BUTTON_NAME = "PredownloadInviteButton";
+        public const string INVITE_BUTTON_TOOLTIP = "Lets you Predownload the world you were invited too (Note: invite's aren't checked to see if the world you've been invite to has already been downloaded)";
+        public const string FRIEND_BUTTON_NAME = "PredownloadFriendButton";
+        public const string WORLD_BUTTON_NAME = "PredownloadWorldButton";
         public const string DOWNLOAD_STATUS_NAME = "DownloadStatusText";
         public const string DOWNLOAD_STATUS_IDLE_TEXT = "Not Downloading";
         //public const string BUTTON_INVITE_OVERWRITE_TEXT = "Accept";

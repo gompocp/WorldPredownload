@@ -28,6 +28,7 @@ namespace WorldPredownload.UI
             button.SetText(Constants.BUTTON_IDLE_TEXT);
             button.SetButtonAction(onClick);
             button.SetActive(true);
+            button.GetComponent<UiTooltip>().field_Public_String_0 = Constants.INVITE_BUTTON_TOOLTIP;
             initialised = true;
         }
 
