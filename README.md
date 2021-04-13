@@ -9,7 +9,8 @@
 - If you go to another world while downloading, it'll cancel the download 
 - Performance may degrade for split second on world enter due to you having a large cache size 
 
-# v1.4.1 Changes
+# v1.4.2 Changes
+- Fixed Invite Button Ui Tooltip Text
 - Removed Components (VRChat cloned one of them 100 times 👀). This should make the mod just that little bit more optimized.
 - Fixed Dismiss Popup XRef failing
 - Added a new setting to hide "Not Downloading" text when not downloading
