@@ -1,5 +1,8 @@
 ﻿using Harmony;
 using MelonLoader;
+using UnityEngine;
+using VRC.Core;
+using VRC.UI;
 using WorldPredownload.UI;
 using WorldPredownload.Cache;
 

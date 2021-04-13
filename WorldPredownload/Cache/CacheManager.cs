@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using System;
+using MelonLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -60,17 +61,12 @@ namespace WorldPredownload.Cache
             return false;
         }
 
-        private static string ComputeVersionString(int version)
+        private static string ComputeVersionString(int version) //Int to Little Endian Hex String
         {
-            // This'll work with worlds with a version sub 4096
-            string result = version.ToString("X").ToLower();
-            if (result.Length == 3)
-            {
-                string part = result.Substring(0, 1);
-                result = result.Substring(1, result.Length - 1);
-                return result += $"0{part}0000";
-            }
-            return result += "000000";
+            byte[] bytes = BitConverter.GetBytes(version);
+            string result = "";
+            foreach (byte b in bytes) result += b.ToString("X2");
+            return result;
         }
 
         public static bool WorldFileExists(string id)

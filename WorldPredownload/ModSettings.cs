@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using MelonLoader.Tomlyn.Model;
 using WorldPredownload.DownloadManager;
 using WorldPredownload.UI;
 
@@ -17,13 +18,23 @@ namespace WorldPredownload
         public static bool showPopupsOnComplete { get; private set; } = true;
         public static bool tryUseAdvancedInvitePopup { get; private set; } = true;
         public static bool AdvancedInvites { get; private set; } = false;
-        
+        internal static MelonPreferences_Entry<bool> AutoFollowInvites = null;
+        internal static MelonPreferences_Entry<bool> AutoFollowFriends = null;
+        internal static MelonPreferences_Entry<bool> AutoFollowWorlds = null;
+        internal static MelonPreferences_Entry<bool> ShowStatusOnQM = null;
+        internal static MelonPreferences_Entry<bool> HideQMStatusWhenInActive = null;
+        internal static MelonPreferences_Entry<bool> ShowHudMessages = null;
+        internal static MelonPreferences_Entry<bool> ShowStatusOnHud = null;
+        internal static MelonPreferences_Entry<bool> ShowPopupsOnComplete = null;
+        internal static MelonPreferences_Entry<bool> TryUseAdvancedInvitePopup = null;
+
         public static void RegisterSettings()
         {
             if (Utilities.HasMod("AdvancedInvites")) 
                AdvancedInvites = true;
-            MelonPreferences.CreateCategory(categoryName, categoryName);
-            MelonPreferences.CreateEntry(categoryName, "AutoFollowInvites", autoFollowInvites, "Auto Follow Invite Predownloads");
+            MelonPreferences_Category category = MelonPreferences.CreateCategory(categoryName, categoryName);
+            AutoFollowInvites = (MelonPreferences_Entry<bool>)category.CreateEntry("AutoFollowInvites", false, "Auto Follow Invite Predownloads");
+            //TODO: Sort this mess out
             MelonPreferences.CreateEntry(categoryName, "AutoFollowWorlds", autoFollowInvites, "Auto Join World Predownloads");
             MelonPreferences.CreateEntry(categoryName, "AutoFollowFriends", autoFollowFriends, "Auto Join Friend Predownloads");
             MelonPreferences.CreateEntry(categoryName, "ShowStatusOnQM", showStatusOnQM, "Display download status on QM");
