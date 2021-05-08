@@ -1,3 +1,7 @@
+# Archive Notice
+
+For ease of use (and my sanity) I've moved this mod to another repo [here](https://github.com/gompocp/VRChatMods) with the rest of my mods so I don't need a seperate solution for each mod
+
 # WorldPredownload ![Current Version](https://img.shields.io/github/v/release/gompocp/WorldPredownload?color=blue)<br>
 - Credit to [Psychloor](https://github.com/Psychloor/AdvancedInvites/blob/master/AdvancedInvites/InviteHandler.cs) for method to convert worldID to apiWorld instance + much much more, and some of the way stuff is structured is also inspired by his utilities file
 - Credit to [Ben](https://github.com/BenjaminZehowlt/DynamicBonesSafety) for xref scanning mechanism and hud icon idea
